@@ -89,41 +89,99 @@ An enterprise-grade, full-stack web application for managing patient appointment
    cd patient-scheduler
    ```
 
-2. **Install frontend dependencies**
+2. **Install dependencies**
    ```bash
+   # Install frontend dependencies
    npm install
+   
+   # Install backend dependencies
+   cd server && npm install && cd ..
    ```
 
-3. **Install backend dependencies**
-   ```bash
-   cd server
-   npm install
-   ```
-
-4. **Set up environment variables**
+3. **Set up environment variables**
    ```bash
    # Create server/.env file with your OpenAI API key
    echo "OPENAI_API_KEY=your-openai-api-key-here" > server/.env
    ```
 
-5. **Seed the database**
-   ```bash
-   cd server
-   npm run seed
-   ```
+### 🎭 Demo Mode (Recommended)
 
-6. **Start both servers**
-   ```bash
-   # Terminal 1: Start backend
-   cd server && npm run dev
-   
-   # Terminal 2: Start frontend
-   npm run dev
-   ```
+**Start in demo mode with synthetic data:**
 
-7. **Open your browser**
-   - Frontend: [http://localhost:5173](http://localhost:5173)
-   - Backend API: [http://localhost:4000](http://localhost:4000)
+```bash
+# Start both frontend and backend in demo mode
+npm run demo
+
+# In another terminal, generate synthetic data
+npm run demo:generate
+```
+
+**Demo mode features:**
+- ✅ **PHI Protection**: Blocks all real patient data
+- ✅ **Synthetic Data**: Realistic but fake healthcare data
+- ✅ **HIPAA Compliant**: Safe Harbor de-identification
+- ✅ **Audit Logging**: All actions logged (redacted)
+- ✅ **UI Warnings**: Clear demo mode indicators
+
+### 🔧 Development Mode
+
+**For development with real data (use with caution):**
+
+```bash
+# Terminal 1: Start backend
+cd server && npm run dev
+
+# Terminal 2: Start frontend  
+npm run dev
+
+# Terminal 3: Seed database
+cd server && npm run seed
+```
+
+**Access the application:**
+- **Production Frontend**: [https://patient-scheduler-frontend.vercel.app](https://patient-scheduler-frontend.vercel.app)
+- **Production Backend**: [https://patient-scheduler-backend.vercel.app](https://patient-scheduler-backend.vercel.app)
+- **Local Development**: [http://localhost:5174](http://localhost:5174)
+- **Local API**: [http://localhost:4000](http://localhost:4000)
+
+## 🚀 Deployment
+
+### Vercel Deployment (Production)
+
+The application is deployed on Vercel with the following URLs:
+
+- **Frontend**: [https://patient-scheduler-frontend.vercel.app](https://patient-scheduler-frontend.vercel.app)
+- **Backend API**: [https://patient-scheduler-backend.vercel.app](https://patient-scheduler-backend.vercel.app)
+
+### Environment Variables
+
+**Frontend (Vercel Dashboard)**:
+```
+VITE_API_BASE_URL=https://patient-scheduler-backend.vercel.app
+```
+
+**Backend (Vercel Dashboard)**:
+```
+OPENAI_API_KEY=your-openai-api-key-here
+NODE_ENV=production
+APP_MODE=production
+```
+
+### Deployment Commands
+
+```bash
+# Deploy frontend
+vercel --prod
+
+# Deploy backend
+cd server && vercel --prod
+```
+
+### Health Checks
+
+- **Frontend Health**: [https://patient-scheduler-frontend.vercel.app](https://patient-scheduler-frontend.vercel.app)
+- **Backend Health**: [https://patient-scheduler-backend.vercel.app/health](https://patient-scheduler-backend.vercel.app/health)
+- **API Providers**: [https://patient-scheduler-backend.vercel.app/api/providers](https://patient-scheduler-backend.vercel.app/api/providers)
 
 ## 🎯 Current Status
 

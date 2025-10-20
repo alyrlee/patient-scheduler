@@ -1,7 +1,8 @@
-// Backend API URL - use local for development
-const API_BASE_URL = import.meta.env.DEV 
-  ? 'http://localhost:4000' 
-  : 'https://patient-scheduler-back-dynwth7i2-ashley-lees-projects.vercel.app';
+// Backend API URL - use environment variable or fallback
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (import.meta.env.DEV 
+    ? 'http://localhost:4000' 
+    : 'https://patient-scheduler-backend.vercel.app');
 
 export async function fetchProviders() {
   const r = await fetch(`${API_BASE_URL}/api/providers`);

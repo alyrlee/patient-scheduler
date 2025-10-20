@@ -38,6 +38,8 @@ app.use(helmet({
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
+  'http://localhost:5174',
+  'https://patient-scheduler-frontend.vercel.app',
   'https://patient-scheduler-front-end.vercel.app',
   'https://patient-scheduler-front-pxgcoegll-ashley-lees-projects.vercel.app',
   'https://patient-scheduler-front-r9kg6bc36-ashley-lees-projects.vercel.app',

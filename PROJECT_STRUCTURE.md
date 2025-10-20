@@ -264,6 +264,8 @@ server/
 - **Daily Monitoring**: Automated performance reports
 
 ### **Deployment Strategy**
+- **Vercel Frontend**: https://patient-scheduler-frontend.vercel.app
+- **Vercel Backend**: https://patient-scheduler-backend.vercel.app
 - **Preview Deployments**: Every PR gets a live preview URL
 - **Production Deployments**: Automated with approval gates
 - **Rollback Support**: Automatic rollback on failure
