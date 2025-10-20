@@ -16,5 +16,5 @@ export const APP_CONFIG = {
 
 // Database Configuration
 export const DB_CONFIG = {
-  url: './database.sqlite'
+  url: '/tmp/database.sqlite'
 };

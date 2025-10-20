@@ -9,6 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const SCHEMA = path.join(__dirname, 'schema.sql');
+const SEED_DB_PATH = path.join(__dirname, 'database.sqlite');
+const TMP_DB_PATH = '/tmp/database.sqlite';
 
 // cache across cold starts in the same lambda container
 let _db;               // module-level
@@ -19,13 +21,34 @@ export function openDb() {
 
   // IMPORTANT: Vercel Serverless = ephemeral; use in-memory
   const isVercel = process.env.VERCEL === '1';
-  const dbPath = isVercel ? ':memory:' : (process.env.DB_PATH || './scheduler.db');
+  
+  let dbPath;
+  if (isVercel) {
+    dbPath = ':memory:';
+  } else {
+    // Use /tmp/database.sqlite for runtime database
+    dbPath = TMP_DB_PATH;
+    
+    // On first boot, copy seed database to /tmp if it doesn't exist
+    if (!fs.existsSync(TMP_DB_PATH)) {
+      if (fs.existsSync(SEED_DB_PATH)) {
+        fs.copyFileSync(SEED_DB_PATH, TMP_DB_PATH);
+        console.log('Copied seed database to /tmp/database.sqlite');
+      }
+    }
+  }
 
   const db = new Database(dbPath);
 
-  const schemaSql = fs.readFileSync(SCHEMA, 'utf8');
-  db.exec('PRAGMA foreign_keys = ON;');
-  db.exec(schemaSql);
+  // Only run schema if using in-memory database (Vercel)
+  if (isVercel) {
+    const schemaSql = fs.readFileSync(SCHEMA, 'utf8');
+    db.exec('PRAGMA foreign_keys = ON;');
+    db.exec(schemaSql);
+  } else {
+    // For file-based database, just ensure foreign keys are enabled
+    db.exec('PRAGMA foreign_keys = ON;');
+  }
 
   if (isVercel && !_seeded) {
     seedDatabase(db);
