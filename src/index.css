@@ -1,0 +1,1120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { 
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body { 
+  margin: 0; 
+  background: #f8fafc;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Layout Improvements */
+main {
+  padding: 2rem;           /* Increase breathing room around content */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Soft card-based structure for sections */
+section {
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  padding: 1.5rem 2rem;    /* Uniform section padding */
+  margin-bottom: 1.5rem;   /* Vertical rhythm */
+}
+
+
+/* Primary content cards */
+.card-primary {
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: none;
+}
+
+/* Secondary content cards */
+.card-secondary {
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  border: none;
+}
+
+/* Content containers with proper spacing */
+.content-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* Header improvements */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Mobile header optimization */
+@media (max-width: 768px) {
+  header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  header .header-title {
+    order: 1;
+  }
+  
+  header .header-subtitle {
+    order: 2;
+    font-size: 0.875rem;
+  }
+  
+  header .header-user {
+    order: 3;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Header content alignment */
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header-user-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Responsive header text */
+@media (max-width: 640px) {
+  .header-title-section h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header-title-section p {
+    font-size: 0.75rem;
+  }
+}
+
+/* Today's Summary Card Improvements */
+.today-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 2rem;
+  background: #f8fafc;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
+}
+
+.today-summary h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.today-summary small {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.today-summary-content {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.today-summary-date {
+  flex-shrink: 0;
+  text-align: right;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.today-summary-appointment {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.today-summary-appointment-icon {
+  width: 3rem;
+  height: 3rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.today-summary-appointment-details {
+  flex: 1;
+}
+
+.today-summary-appointment-details h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.today-summary-appointment-details p {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.today-summary-appointment-details .appointment-time {
+  color: #059669;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.today-summary-appointment-details .appointment-location {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.today-summary-appointment-details .appointment-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.today-summary-appointment-details .appointment-status.confirmed {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.today-summary-appointment-details .appointment-status.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* No appointments today - celebratory styling */
+.today-summary-no-appointments {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.today-summary-no-appointments-icon {
+  width: 3rem;
+  height: 3rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.today-summary-no-appointments-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #059669;
+  margin-bottom: 0.25rem;
+}
+
+.today-summary-no-appointments-content p {
+  color: #059669;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Mobile responsive for today summary */
+@media (max-width: 768px) {
+  .today-summary {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  
+  .today-summary-date {
+    text-align: left;
+    order: -1;
+  }
+  
+  .today-summary-appointment {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .today-summary-appointment-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+  }
+  
+  .today-summary-no-appointments {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .today-summary-no-appointments-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* Chat / AI Assistant Section Improvements */
+.chat-box {
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.chat-messages {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+.message {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.message.assistant {
+  margin-right: 2rem;
+  align-items: flex-start;
+}
+
+.message.user {
+  margin-left: 2rem;
+  align-items: flex-end;
+}
+
+.message-content {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.message.assistant .message-content {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.message.user .message-content {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+}
+
+.message-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.message.assistant .message-avatar {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  margin-right: 0.75rem;
+}
+
+.message.user .message-avatar {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  margin-left: 0.75rem;
+  order: 2;
+}
+
+.timestamp {
+  margin-top: 0.25rem;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.message.assistant .timestamp {
+  text-align: left;
+}
+
+.message.user .timestamp {
+  text-align: right;
+}
+
+/* Suggestion chips improvements */
+.suggestion-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
+}
+
+.suggestion-chip {
+  padding: 0.5rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.suggestion-chip:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+/* Chat input improvements */
+.chat-input-container {
+  padding: 1rem 0 0 0;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
+}
+
+.chat-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.chat-send-button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 0.5rem;
+}
+
+.chat-send-button:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.chat-send-button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  margin-right: 2rem;
+  max-width: 80%;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.typing-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #94a3b8;
+  border-radius: 50%;
+  animation: typingPulse 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingPulse {
+  0%, 60%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  30% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Mobile responsive for chat */
+@media (max-width: 768px) {
+  .chat-box {
+    padding: 1rem 1.5rem;
+  }
+  
+  .message.assistant {
+    margin-right: 1rem;
+  }
+  
+  .message.user {
+    margin-left: 1rem;
+  }
+  
+  .message-content {
+    max-width: 90%;
+  }
+  
+  .suggestion-chips {
+    gap: 0.25rem;
+    padding-top: 0.75rem;
+  }
+  
+  .suggestion-chip {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile responsive adjustments for screens <640px */
+@media (max-width: 640px) {
+  /* Reduce padding across all sections */
+  .card-primary,
+  .card-secondary,
+  .card-soft {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .today-summary {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .chat-box {
+    padding: 1rem;
+  }
+  
+  /* Stack AI Assistant and Summary vertically */
+  .dashboard-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Chat input sticky at bottom */
+  .chat-input-container {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 0;
+    z-index: 10;
+  }
+  
+  .chat-input {
+    padding: 0.75rem;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .chat-send-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Reduce message margins on mobile */
+  .message {
+    margin-bottom: 0.75rem;
+  }
+  
+  .message.assistant {
+    margin-right: 0.5rem;
+  }
+  
+  .message.user {
+    margin-left: 0.5rem;
+  }
+  
+  .message-content {
+    max-width: 95%;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Optimize suggestion chips for mobile */
+  .suggestion-chips {
+    gap: 0.25rem;
+    padding-top: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  
+  .suggestion-chip {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Header adjustments for mobile */
+  header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .header-title-section h1 {
+    font-size: 1.25rem;
+  }
+  
+  .header-title-section p {
+    font-size: 0.75rem;
+  }
+  
+  /* Sidebar mobile adjustments */
+  .sidebar-mobile {
+    padding: 1rem;
+  }
+  
+  /* Content container mobile adjustments */
+  .content-container {
+    padding: 1rem;
+  }
+  
+  /* Provider cards mobile optimization */
+  .provider-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Appointment cards mobile optimization */
+  .appointment-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Button adjustments for mobile */
+  button {
+    min-height: 44px; /* Touch-friendly minimum */
+  }
+  
+  /* Input field adjustments */
+  input, textarea, select {
+    min-height: 44px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  /* Safe area adjustments for devices with notches */
+  .chat-input-container {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+  
+  /* Ensure proper spacing in main content */
+  main {
+    padding: 1rem;
+  }
+  
+  /* Grid adjustments for mobile */
+  .grid {
+    gap: 1rem;
+  }
+  
+  /* Flex adjustments for mobile */
+  .flex {
+    gap: 0.75rem;
+  }
+  
+  /* Text size adjustments for mobile */
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+  }
+  
+  h3 {
+    font-size: 1.125rem;
+  }
+  
+  /* Reduce shadow intensity on mobile for better performance */
+  .shadow-lg {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .shadow-xl {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+}
+
+/* Visual Hierarchy & Typography Improvements */
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+p {
+  color: #334155;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+/* Enhanced text contrast for better readability */
+.text-primary {
+  color: #1e293b;
+}
+
+.text-secondary {
+  color: #334155;
+}
+
+.text-muted {
+  color: #64748b;
+}
+
+/* Section background alternation for visual hierarchy */
+.section-primary {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.section-secondary {
+  background: #f9fafb;
+  border: 1px solid #e2e8f0;
+}
+
+/* Enhanced card styling with better hierarchy */
+.card-primary {
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e2e8f0;
+}
+
+.card-secondary {
+  border-radius: 0.75rem;
+  background: #f9fafb;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #e2e8f0;
+}
+
+
+/* Enhanced header styling */
+.header-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.header-subtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Enhanced today summary styling */
+.today-summary h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.today-summary-appointment-details h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.today-summary-appointment-details p {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.today-summary-appointment-details .appointment-time {
+  color: #059669;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.today-summary-appointment-details .appointment-location {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Enhanced chat styling */
+.chat-box h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.chat-box p {
+  color: #334155;
+  line-height: 1.6;
+}
+
+/* Enhanced message styling */
+.message-content {
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+.message.assistant .message-content {
+  color: #1e293b;
+}
+
+.message.user .message-content {
+  color: white;
+}
+
+/* Enhanced button text styling */
+button {
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Enhanced input styling */
+input, textarea, select {
+  color: #1e293b;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Enhanced provider card styling */
+.provider-card h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.provider-card p {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Enhanced appointment card styling */
+.appointment-card h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.appointment-card p {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Enhanced sidebar styling */
+.sidebar h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar p {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Enhanced navigation styling */
+.nav-item {
+  font-weight: 500;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.nav-item.active {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Enhanced quick action styling */
+.quick-action {
+  font-weight: 500;
+  color: #1e293b;
+  line-height: 1.4;
+}
+
+/* Enhanced status styling */
+.status {
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.status.confirmed {
+  color: #166534;
+}
+
+.status.pending {
+  color: #92400e;
+}
+
+.status.cancelled {
+  color: #dc2626;
+}
+
+/* Enhanced timestamp styling */
+.timestamp {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* Enhanced suggestion chip styling */
+.suggestion-chip {
+  font-weight: 500;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.suggestion-chip:hover {
+  color: #1e293b;
+}
+
+/* Enhanced form label styling */
+label {
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+/* Enhanced error message styling */
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Enhanced success message styling */
+.success-message {
+  color: #059669;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Enhanced loading text styling */
+.loading-text {
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Smooth scroll for chat container */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  /* Ensure touch targets are at least 44px */
+  button, input, select, textarea {
+    min-height: 44px;
+  }
+  
+  /* Improve text readability on mobile */
+  body {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  /* Better spacing for mobile */
+  .space-y-3 > * + * {
+    margin-top: 0.75rem;
+  }
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #0ea5e9;
+  outline-offset: 2px;
+}
+
+/* Touch-friendly hover states */
+@media (hover: none) and (pointer: coarse) {
+  .hover\:bg-slate-50:hover {
+    background-color: transparent;
+  }
+
+  .hover\:bg-sky-700:hover {
+    background-color: #0284c7;
+  }
+
+  .hover\:shadow:hover {
+    box-shadow: none;
+  }
+}
+
+/* Chat animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Slide in animation for appointments */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Success animation */
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-successPulse {
+  animation: successPulse 0.6s ease-in-out;
+}
