@@ -47,7 +47,8 @@ export function createApp() {
     "https://patient-scheduler-six.vercel.app",
   ]);
 
-  app.use(cors({
+  // CORS configuration
+  const corsOptions = {
     origin: (origin, cb) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return cb(null, true);
@@ -67,8 +68,40 @@ export function createApp() {
     credentials: true,
     methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
     allowedHeaders: ["Content-Type","Authorization","X-Requested-With"]
-  }));
-  app.options("*", cors()); // preflight
+  };
+
+  app.use(cors(corsOptions));
+  app.options("*", cors(corsOptions)); // preflight
+
+  // Explicit OPTIONS handler for all API routes
+  app.options("/api/*", (req, res) => {
+    const origin = req.headers.origin;
+    
+    if (origin && (origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || allowedOrigins.has(origin))) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
+      res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+    }
+    
+    res.status(200).end();
+  });
+
+  // Global CORS headers middleware - ensures ALL responses have CORS headers
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    
+    // Set CORS headers for all responses
+    if (origin && (origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || allowedOrigins.has(origin))) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
+    }
+    
+    next();
+  });
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -285,6 +318,26 @@ export function createApp() {
         : `No matches for "${q}".`,
       intent: "search",
       results
+    });
+  });
+
+  // Global error handler - ensures error responses also have CORS headers
+  app.use((err, req, res, next) => {
+    console.error('Global error handler:', err);
+    
+    const origin = req.headers.origin;
+    
+    // Set CORS headers for error responses
+    if (origin && (origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || allowedOrigins.has(origin))) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
+    }
+    
+    res.status(err.status || 500).json({ 
+      error: err.message || 'Internal server error',
+      timestamp: new Date().toISOString()
     });
   });
 
