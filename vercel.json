@@ -4,15 +4,11 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/health",
-      "destination": "/api/health.js"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
   "env": {
-    "VITE_API_BASE_URL": "https://patient-scheduler-frontend.vercel.app"
+    "VITE_API_BASE_URL": "https://patient-scheduler-backend.vercel.app"
   }
 }
