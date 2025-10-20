@@ -37,34 +37,34 @@ export function createApp() {
     },
   }));
 
-  // CORS allowlist - specific domains only
-  const allowlist = new Set([
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://patient-scheduler-frontend.vercel.app',
-    'https://patient-scheduler-front-end.vercel.app',
-    'https://patient-scheduler-six.vercel.app',
-  ]);
-
-  // CORS middleware with explicit allowlist
+  // Simplified CORS for proxy approach
+  // With frontend proxy, most requests are same-origin, but we still need CORS for direct API access
   const corsMw = cors({
     origin: (origin, cb) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return cb(null, true);
       
       // Allow localhost for development
-      if (origin.startsWith("http://localhost")) return cb(null, true);
+      if (origin.startsWith('http://localhost')) return cb(null, true);
       
-      // Check against allowlist
-      if (allowlist.has(origin)) return cb(null, true);
+      // Allow all Vercel preview domains for this project
+      if (origin.endsWith('.vercel.app') && origin.includes('patient-scheduler')) return cb(null, true);
+      
+      // Allow specific production domains
+      const allowedOrigins = [
+        'https://patient-scheduler-frontend.vercel.app',
+        'https://patient-scheduler-front-end.vercel.app',
+        'https://patient-scheduler-six.vercel.app'
+      ];
+      
+      if (allowedOrigins.includes(origin)) return cb(null, true);
       
       console.log(`CORS blocked origin: ${origin}`);
-      return cb(new Error("Not allowed by CORS"));
+      return cb(null, false);
     },
     credentials: true,
     methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-    allowedHeaders: ['Content-Type','Authorization','X-Requested-With']
+    allowedHeaders: ['Content-Type','Authorization','X-Requested-With','Accept']
   });
 
   app.use(corsMw);
