@@ -68,7 +68,6 @@ export function createApp() {
   });
 
   app.use(corsMw);
-  app.options('*', corsMw); // Handle all OPTIONS requests
 
   // Global CORS headers middleware - ensures ALL responses have CORS headers
   app.use((req, res, next) => {

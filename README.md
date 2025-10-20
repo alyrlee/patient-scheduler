@@ -104,6 +104,8 @@ An enterprise-grade, full-stack web application for managing patient appointment
    echo "OPENAI_API_KEY=your-openai-api-key-here" > server/.env
    ```
 
+   ⚠️ **SECURITY WARNING**: Never commit actual API keys to the repository. The `.env` file is already in `.gitignore` to prevent accidental commits.
+
 ### 🎭 Demo Mode (Recommended)
 
 **Start in demo mode with synthetic data:**
@@ -167,6 +169,8 @@ OPENAI_API_KEY=your-openai-api-key-here
 NODE_ENV=production
 APP_MODE=production
 ```
+
+⚠️ **SECURITY**: Use environment variables for all sensitive data. Never hardcode API keys in source code.
 
 ### Deployment Commands
 
