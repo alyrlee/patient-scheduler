@@ -1,0 +1,128 @@
+import React, { Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import ErrorBoundary from './components/ErrorBoundary';
+import Spinner from './components/Spinner';
+
+// Lazy load pages
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const Providers = React.lazy(() => import('./pages/Providers'));
+const Appointments = React.lazy(() => import('./pages/Appointments'));
+const Chat = React.lazy(() => import('./pages/Chat'));
+const Settings = React.lazy(() => import('./pages/Settings'));
+
+// Loading component
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-64">
+      <Spinner className="h-8 w-8" />
+    </div>
+  );
+}
+
+// Error boundary for individual routes
+function RouteErrorBoundary({ children }) {
+  return (
+    <ErrorBoundary>
+      {children}
+    </ErrorBoundary>
+  );
+}
+
+export default function AppRouter() {
+  return (
+    <BrowserRouter>
+      <div className="h-screen flex overflow-hidden bg-gradient-to-br from-custom-gray-50 via-white to-curious-blue-50">
+        {/* Sidebar would go here */}
+        <div className="flex flex-col w-0 flex-1 overflow-hidden">
+          {/* Header would go here */}
+          <main id="main" className="flex-1 relative overflow-y-auto focus:outline-none content-container">
+            <div className="py-6">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                <Routes>
+                  <Route 
+                    path="/" 
+                    element={
+                      <RouteErrorBoundary>
+                        <Suspense fallback={<PageLoader />}>
+                          <Dashboard />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    } 
+                  />
+                  <Route 
+                    path="/providers" 
+                    element={
+                      <RouteErrorBoundary>
+                        <Suspense fallback={<PageLoader />}>
+                          <Providers />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    } 
+                  />
+                  <Route 
+                    path="/appointments" 
+                    element={
+                      <RouteErrorBoundary>
+                        <Suspense fallback={<PageLoader />}>
+                          <Appointments />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    } 
+                  />
+                  <Route 
+                    path="/chat" 
+                    element={
+                      <RouteErrorBoundary>
+                        <Suspense fallback={<PageLoader />}>
+                          <Chat />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    } 
+                  />
+                  <Route 
+                    path="/settings" 
+                    element={
+                      <RouteErrorBoundary>
+                        <Suspense fallback={<PageLoader />}>
+                          <Settings />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    } 
+                  />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </div>
+            </div>
+          </main>
+        </div>
+        
+        {/* Toast notifications */}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: '#10B981',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              duration: 5000,
+              iconTheme: {
+                primary: '#EF4444',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
+      </div>
+    </BrowserRouter>
+  );
+}
