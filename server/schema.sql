@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS providers (
   doctor TEXT NOT NULL,
   specialty TEXT NOT NULL,
   location TEXT NOT NULL,
-  rating REAL NOT NULL
+  rating REAL NOT NULL,
+  bio TEXT
 );
 
 -- slots (discrete bookable times)
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS slots (
   id TEXT PRIMARY KEY,
   provider_id TEXT NOT NULL,
   start TEXT NOT NULL,  -- ISO datetime
+  end TEXT NOT NULL,    -- ISO datetime
   status TEXT NOT NULL DEFAULT 'open', -- open | held | booked
   FOREIGN KEY(provider_id) REFERENCES providers(id)
 );

@@ -8,7 +8,6 @@ jobs:
   deploy-preview:
     name: Deploy Preview
     runs-on: ubuntu-latest
-    environment: preview
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

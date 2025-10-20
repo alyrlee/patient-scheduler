@@ -2,17 +2,17 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "runtime": "nodejs20.x"
     }
   },
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.js"
-    }
+    { "src": "/api/(.*)", "dest": "/api/index.js" },
+    { "src": "/health", "dest": "/api/index.js" },
+    { "src": "/", "dest": "/api/index.js" }
   ],
   "env": {
     "NODE_ENV": "production",
-    "APP_MODE": "production"
+    "APP_MODE": "demo"
   }
 }

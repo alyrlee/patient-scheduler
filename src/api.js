@@ -47,3 +47,13 @@ export async function rescheduleAppointment(id, start) {
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
+
+export async function sendChatMessage(message) {
+  const r = await fetch(`${API_BASE_URL}/api/chat`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ message })
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
