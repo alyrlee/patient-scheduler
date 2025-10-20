@@ -4,8 +4,7 @@
   "framework": "vite",
   "functions": {
     "api/index.js": {
-      "maxDuration": 30,
-      "runtime": "nodejs20.x"
+      "maxDuration": 30
     }
   },
   "rewrites": [
