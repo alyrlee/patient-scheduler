@@ -1,5 +1,5 @@
 // Backend API URL
-const API_BASE_URL = 'https://patient-scheduler-back-7saaws7xd-ashley-lees-projects.vercel.app';
+const API_BASE_URL = 'https://patient-scheduler-back-dynwth7i2-ashley-lees-projects.vercel.app';
 
 export async function fetchProviders() {
   const r = await fetch(`${API_BASE_URL}/api/providers`);

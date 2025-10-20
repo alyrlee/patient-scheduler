@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback, Suspense } from "react";
+import { Toaster } from "react-hot-toast";
 import {
   fetchProviders,
   fetchAppointments,
@@ -11,6 +12,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AssistantSection from "./AssistantSection";
 import Spinner from "@/components/Spinner";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { useApiError } from "./hooks/useApiError";
 
 // Lazy load non-critical views
 const ProvidersView = React.lazy(() => import("./views/ProvidersView"));
@@ -154,6 +157,9 @@ export default function App() {
   const [cancelledAppointment, setCancelledAppointment] = useState(null); // Track cancelled appointment for undo
   const [showUndoSnackbar, setShowUndoSnackbar] = useState(false); // Show undo snackbar
   const [isSearchingProviders, setIsSearchingProviders] = useState(false); // Track provider search state
+  
+  // Error handling hook
+  const { handleError, handleSuccess, handleInfo } = useApiError();
 
   // Load initial data
   useEffect(() => {
@@ -190,7 +196,7 @@ export default function App() {
 
         setLoading(false);
       } catch (err) {
-        console.error(err);
+        handleError(err, 'loading initial data');
         setError("Failed to load data.");
         setLoading(false);
       }
@@ -235,6 +241,7 @@ export default function App() {
       
       // Show success animation
       setShowBookingSuccess(true);
+      handleSuccess("Appointment booked successfully!");
       setTimeout(() => setShowBookingSuccess(false), 3000);
       
       // Clear selection after booking
@@ -242,8 +249,7 @@ export default function App() {
       setSelectedSlot(null);
       
     } catch (err) {
-      console.error(err);
-      alert("Error booking appointment");
+      handleError(err, 'booking appointment');
     } finally {
       setBooking(false);
     }
@@ -444,8 +450,8 @@ export default function App() {
               {(p.slots || []).map((s, index) => {
                 const isSelected = selectedProvider?.id === p.id && selectedSlot?.iso === s.iso;
                 const isBooking = booking && isSelected;
-                return (
-                  <button
+  return (
+          <button
                     key={s.id || `${s.iso}-${index}`}
                     className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${
                       isSelected 
@@ -463,7 +469,7 @@ export default function App() {
                     ) : (
                       s.label
                     )}
-                  </button>
+          </button>
                 );
               })}
               {(p.slots || []).length === 0 && (
@@ -519,7 +525,7 @@ export default function App() {
   if (error) return <p className="p-4 text-red-500">{error}</p>;
 
   return (
-    <>
+    <ErrorBoundary>
       {/* Skip link for keyboard users */}
       <a 
         href="#main" 
@@ -1189,6 +1195,32 @@ export default function App() {
           </div>
         </div>
         )}
-    </>
+        
+        {/* Toast notifications */}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: '#10B981',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              duration: 5000,
+              iconTheme: {
+                primary: '#EF4444',
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
+    </ErrorBoundary>
   );
 }

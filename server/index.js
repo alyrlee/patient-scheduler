@@ -2,6 +2,8 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import { z } from "zod";
@@ -18,8 +20,69 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-app.use(cors());
-app.use(express.json());
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+}));
+
+// CORS with allowlist
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://patient-scheduler-front-end.vercel.app',
+  'https://patient-scheduler-front-pxgcoegll-ashley-lees-projects.vercel.app',
+  'https://patient-scheduler-front-r9kg6bc36-ashley-lees-projects.vercel.app',
+  'https://patient-scheduler-front-8et5r1c58-ashley-lees-projects.vercel.app'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    error: 'Too many requests from this IP, please try again later.',
+    retryAfter: '15 minutes'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(limiter);
+
+// Stricter rate limiting for AI endpoints
+const aiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // limit each IP to 20 AI requests per windowMs
+  message: {
+    error: 'Too many AI requests from this IP, please try again later.',
+    retryAfter: '15 minutes'
+  }
+});
+
+app.use(express.json({ limit: '10mb' }));
 app.use(morgan("dev"));
 
 // Optional friendly root for browser checks
@@ -228,7 +291,7 @@ function parseIntent(text) {
 }
 
 // ---------- AI Chat Endpoint ----------
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', aiLimiter, async (req, res) => {
   const { message } = req.body || {};
   if (!message) return res.status(400).json({ error: 'message required' });
 
