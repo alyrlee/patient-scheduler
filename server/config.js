@@ -1,6 +1,6 @@
 // OpenAI Configuration
 export const OPENAI_CONFIG = {
-  apiKey: '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',
+  apiKey: process.env.OPENAI_API_KEY, // no default
   model: 'gpt-3.5-turbo',
   maxTokens: 1000,
   temperature: 0.7
