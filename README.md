@@ -157,8 +157,9 @@ The application is deployed on Vercel with the following URLs:
 
 **Frontend (Vercel Dashboard)**:
 ```
-VITE_API_BASE_URL=https://patient-scheduler-backend.vercel.app
+VITE_API_BASE_URL=
 ```
+*Note: Empty string for production - uses relative URLs with proxy rewrites*
 
 **Backend (Vercel Dashboard)**:
 ```

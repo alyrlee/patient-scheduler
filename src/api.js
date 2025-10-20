@@ -1,8 +1,6 @@
-// Backend API URL - use environment variable or fallback
+// Backend API URL - use environment variable or fallback for DEV only
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-  (import.meta.env.DEV 
-    ? 'http://localhost:4000' 
-    : 'https://server-6t3aytxht-ashley-lees-projects.vercel.app');
+  (import.meta.env.DEV ? 'http://localhost:4000' : '');
 
 // Common fetch options
 const common = { 

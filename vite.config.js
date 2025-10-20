@@ -35,12 +35,12 @@ export default defineConfig({
       '/health': 'http://localhost:4000'
     }
   },
-  // Vercel configuration
+  // Environment-based API URL configuration
   define: {
     'import.meta.env.VITE_API_BASE_URL': JSON.stringify(
       process.env.NODE_ENV === 'production' 
-        ? 'https://patient-scheduler-backend.vercel.app'
-        : 'http://localhost:4000'
+        ? '' // Empty for production - will use relative URLs with proxy
+        : 'http://localhost:4000' // DEV fallback
     )
   }
 });
