@@ -69,20 +69,6 @@ export function createApp() {
 
   app.use(corsMw);
 
-  // Global CORS headers middleware - ensures ALL responses have CORS headers
-  app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    
-    // Set CORS headers for all responses
-    if (origin && (allowlist.has(origin) || origin.startsWith('http://localhost'))) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader('Vary', 'Origin');
-    }
-    
-    next();
-  });
-
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
@@ -301,18 +287,9 @@ export function createApp() {
     });
   });
 
-  // Global error handler - ensures error responses also have CORS headers
+  // Global error handler
   app.use((err, req, res, next) => {
     console.error('Global error handler:', err);
-    
-    const origin = req.headers.origin;
-    
-    // Set CORS headers for error responses
-    if (origin && (allowlist.has(origin) || origin.startsWith('http://localhost'))) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader('Vary', 'Origin');
-    }
     
     res.status(err.status || 500).json({ 
       error: err.message || 'Internal server error',
