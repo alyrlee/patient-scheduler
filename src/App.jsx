@@ -520,6 +520,14 @@ export default function App() {
 
   return (
     <>
+      {/* Skip link for keyboard users */}
+      <a 
+        href="#main" 
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[999] focus:bg-white focus:text-slate-900 focus:px-3 focus:py-2 focus:rounded-md focus:shadow"
+      >
+        Skip to main content
+      </a>
+      
       <div className="h-screen flex overflow-hidden bg-gradient-to-br from-custom-gray-50 via-white to-curious-blue-50">
 
           {/* Mobile Overlay */}
@@ -761,47 +769,61 @@ export default function App() {
       {/* Main Content */}
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
         {/* Top Bar */}
-        <header role="banner" className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-slate-200/60 shadow-sm">
-          <div className="max-w-7xl mx-auto h-16 sm:h-20 px-4 sm:px-6 md:px-8 flex items-center justify-between">
-            {/* Left: logo + title */}
-            <div className="min-w-0 flex items-center gap-4">
-              {/* Mobile menu button (shown on small screens only) */}
+        <header
+          role="banner"
+          className={[
+            "sticky top-0 z-40 bg-white/80 backdrop-blur",
+            "border-b border-slate-200/70",
+            "supports-[backdrop-filter]:bg-white/60", // crisper blur on Safari
+          ].join(" ")}
+        >
+          <div className="max-w-7xl mx-auto h-14 sm:h-16 px-3 sm:px-6 md:px-8 flex items-center justify-between">
+            {/* Left: menu + mark + title */}
+            <div className="min-w-0 flex items-center gap-2.5 sm:gap-4">
+              {/* Mobile menu */}
               <button
                 onClick={() => setSidebarOpen((s) => !s)}
-                className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+                className="md:hidden -ml-1 p-2 rounded-lg hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-curious-blue-500"
                 aria-label="Open navigation"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
               </button>
 
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-curious-blue-600 to-curious-blue-700 text-white grid place-items-center shadow-lg shrink-0">
-                🏥
+              {/* App mark */}
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-curious-blue-600 to-curious-blue-700 text-white grid place-items-center shadow shrink-0">
+                <span aria-hidden>🏥</span>
+                <span className="sr-only">Patient Scheduler</span>
             </div>
 
+              {/* Title block */}
               <div className="min-w-0">
-                <h1 className="text-xl font-bold text-slate-900 truncate">
+                <h1 className="text-[1.125rem] sm:text-[1.25rem] leading-6 font-semibold text-slate-900 truncate">
                   Patient Scheduler
                 </h1>
-                <p className="text-sm text-slate-500">Cardiology Management</p>
+                <p className="text-xs sm:text-[0.8rem] text-slate-500 leading-5">Cardiology Management</p>
               </div>
               </div>
 
-            {/* Right: date, assistant status, avatar */}
-            <div className="flex items-center gap-4 sm:gap-6">
-              <span className="hidden md:inline text-sm text-slate-500 font-medium">{todayStr}</span>
+            {/* Right: date • status • user */}
+            <div className="flex items-center gap-2.5 sm:gap-4">
+              <span className="hidden md:inline text-xs sm:text-sm text-slate-500 whitespace-nowrap">
+                {todayStr}
+              </span>
 
-              <span className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="hidden sm:inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse motion-reduce:animate-none" />
                 Assistant online
               </span>
 
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-semibold text-slate-900">Welcome back!</p>
+              <div className="text-right hidden lg:block leading-5">
+                <p className="text-sm font-medium text-slate-900">Welcome back!</p>
                 <p className="text-xs text-slate-500">Ready to schedule?</p>
               </div>
 
               <button
-                className="w-11 h-11 rounded-xl bg-gradient-to-br from-curious-blue-500 to-curious-blue-600 text-white font-bold grid place-items-center shadow-lg hover:shadow-xl transition-shadow"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-curious-blue-500 to-curious-blue-600 text-white font-semibold grid place-items-center shadow hover:shadow-md transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-curious-blue-500"
                 aria-label="Open user menu"
               >
                 U
@@ -811,7 +833,7 @@ export default function App() {
         </header>
 
             {/* Main Content Area */}
-            <main className="flex-1 relative overflow-y-auto focus:outline-none content-container">
+            <main id="main" className="flex-1 relative overflow-y-auto focus:outline-none content-container">
               <div className="py-6">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                     {/* Today Summary Card */}
