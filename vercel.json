@@ -2,15 +2,25 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "env": {
-    "VITE_API_BASE_URL": "https://patient-scheduler-backend.vercel.app"
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30,
+      "runtime": "nodejs20.x"
+    }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ],
+  "env": {
+    "VITE_API_BASE_URL": "https://patient-scheduler-frontend.vercel.app"
+  },
   "headers": [
     {
       "source": "/(.*)",
