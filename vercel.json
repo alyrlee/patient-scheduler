@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
@@ -8,13 +7,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "server/index.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 }
