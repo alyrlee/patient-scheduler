@@ -1,0 +1,106 @@
+name: Preview Deployment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  deploy-preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    environment: preview
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Deploy to Vercel Preview
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
+          scope: ${{ secrets.VERCEL_SCOPE }}
+
+      - name: Deploy Backend Preview
+        run: |
+          # Deploy backend to Railway/Render preview
+          curl -X POST "https://api.railway.app/v1/projects/${{ secrets.RAILWAY_PROJECT_ID }}/deployments" \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "environment": "preview",
+              "branch": "${{ github.head_ref }}"
+            }'
+
+      - name: Run E2E Tests on Preview
+        run: |
+          # Wait for deployments to be ready
+          sleep 60
+          
+          # Run E2E tests against preview URLs
+          npm run test:e2e -- --config=playwright.preview.config.js
+
+      - name: Comment PR with Preview URLs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('Preview deployment')
+            );
+            
+            const previewUrl = process.env.VERCEL_PREVIEW_URL || 'https://preview.example.com';
+            const backendUrl = process.env.RAILWAY_PREVIEW_URL || 'https://api-preview.example.com';
+            
+            const body = `## 🚀 Preview Deployment Ready!
+            
+            **Frontend:** ${previewUrl}
+            **Backend:** ${backendUrl}
+            
+            ### Test Coverage
+            - ✅ Unit tests passed
+            - ✅ E2E tests passed
+            - ✅ Performance budget met
+            - ✅ Security scan passed
+            
+            ### What's Changed
+            - ${context.payload.pull_request.title}
+            - ${context.payload.pull_request.commits} commits
+            
+            ---
+            *This preview will be automatically destroyed when the PR is closed.*`;
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }

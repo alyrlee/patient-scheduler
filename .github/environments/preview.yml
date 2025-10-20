@@ -1,0 +1,25 @@
+name: preview
+protection_rules:
+  - type: required_reviewers
+    required_reviewers: 1
+    dismiss_stale_reviews: false
+  - type: required_status_checks
+    required_status_checks:
+      - context: "Lint & Type Check"
+      - context: "Frontend Tests & Build"
+
+secrets:
+  - name: VERCEL_TOKEN
+    description: "Vercel deployment token"
+  - name: VERCEL_ORG_ID
+    description: "Vercel organization ID"
+  - name: VERCEL_PROJECT_ID
+    description: "Vercel project ID"
+  - name: RAILWAY_TOKEN
+    description: "Railway deployment token for backend previews"
+  - name: RAILWAY_PROJECT_ID
+    description: "Railway project ID for backend"
+  - name: OPENAI_API_KEY
+    description: "OpenAI API key for AI features"
+  - name: DATABASE_URL
+    description: "Preview database connection string"

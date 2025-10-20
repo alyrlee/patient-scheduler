@@ -1,0 +1,189 @@
+name: Performance Monitoring
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Run daily at 4 AM UTC
+    - cron: '0 4 * * *'
+
+jobs:
+  lighthouse-ci:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+          lhci autorun --upload.target=temporary-public-storage
+
+      - name: Comment PR with Performance Report
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read Lighthouse results
+            const resultsPath = path.join(process.cwd(), '.lighthouseci');
+            let performanceReport = '## 📊 Performance Report\n\n';
+            
+            try {
+              const results = JSON.parse(fs.readFileSync(path.join(resultsPath, 'manifest.json'), 'utf8'));
+              
+              results.forEach(result => {
+                const scores = result.summary;
+                performanceReport += `### ${result.url}\n`;
+                performanceReport += `- **Performance**: ${Math.round(scores.performance * 100)}/100\n`;
+                performanceReport += `- **Accessibility**: ${Math.round(scores.accessibility * 100)}/100\n`;
+                performanceReport += `- **Best Practices**: ${Math.round(scores['best-practices'] * 100)}/100\n`;
+                performanceReport += `- **SEO**: ${Math.round(scores.seo * 100)}/100\n\n`;
+              });
+            } catch (error) {
+              performanceReport += 'Unable to generate performance report.\n';
+            }
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: performanceReport
+            });
+
+  bundle-analysis:
+    name: Bundle Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and analyze bundle
+        run: |
+          npm run build
+          npm run bundlesize
+
+      - name: Generate bundle report
+        run: |
+          npx webpack-bundle-analyzer dist/assets/*.js --mode static --report bundle-report.html --no-open
+
+      - name: Upload bundle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: bundle-report.html
+          retention-days: 30
+
+  performance-budget:
+    name: Performance Budget Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Check performance budget
+        run: |
+          # Check main bundle size
+          MAIN_JS=$(find dist/assets -name "index-*.js" | head -1)
+          MAIN_JS_SIZE=$(gzip -c "$MAIN_JS" | wc -c)
+          MAIN_JS_SIZE_KB=$((MAIN_JS_SIZE / 1024))
+          
+          echo "Main JS bundle size: ${MAIN_JS_SIZE_KB}KB"
+          
+          # Check CSS bundle size
+          MAIN_CSS=$(find dist/assets -name "index-*.css" | head -1)
+          MAIN_CSS_SIZE=$(gzip -c "$MAIN_CSS" | wc -c)
+          MAIN_CSS_SIZE_KB=$((MAIN_CSS_SIZE / 1024))
+          
+          echo "Main CSS bundle size: ${MAIN_CSS_SIZE_KB}KB"
+          
+          # Budget checks
+          JS_BUDGET=250
+          CSS_BUDGET=50
+          
+          if [ $MAIN_JS_SIZE_KB -gt $JS_BUDGET ]; then
+            echo "❌ Main JS bundle exceeds budget: ${MAIN_JS_SIZE_KB}KB > ${JS_BUDGET}KB"
+            exit 1
+          fi
+          
+          if [ $MAIN_CSS_SIZE_KB -gt $CSS_BUDGET ]; then
+            echo "❌ Main CSS bundle exceeds budget: ${MAIN_CSS_SIZE_KB}KB > ${CSS_BUDGET}KB"
+            exit 1
+          fi
+          
+          echo "✅ All bundles within budget"
+
+  regression-detection:
+    name: Performance Regression Detection
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and measure
+        run: |
+          npm run build
+          
+          # Measure bundle sizes
+          MAIN_JS=$(find dist/assets -name "index-*.js" | head -1)
+          MAIN_JS_SIZE=$(gzip -c "$MAIN_JS" | wc -c)
+          echo "BUNDLE_SIZE_JS=$MAIN_JS_SIZE" >> $GITHUB_ENV
+          
+          MAIN_CSS=$(find dist/assets -name "index-*.css" | head -1)
+          MAIN_CSS_SIZE=$(gzip -c "$MAIN_CSS" | wc -c)
+          echo "BUNDLE_SIZE_CSS=$MAIN_CSS_SIZE" >> $GITHUB_ENV
+
+      - name: Compare with main branch
+        run: |
+          # This would typically compare with baseline metrics
+          echo "Current JS bundle: $BUNDLE_SIZE_JS bytes"
+          echo "Current CSS bundle: $BUNDLE_SIZE_CSS bytes"
+          
+          # In a real implementation, you'd fetch baseline metrics
+          # and compare them to detect regressions
