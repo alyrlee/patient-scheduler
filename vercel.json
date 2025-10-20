@@ -9,6 +9,6 @@
     }
   ],
   "env": {
-    "VITE_API_BASE_URL": "https://patient-scheduler-backend.vercel.app"
+    "VITE_API_BASE_URL": "https://server-6t3aytxht-ashley-lees-projects.vercel.app"
   }
 }

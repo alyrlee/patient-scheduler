@@ -37,67 +37,48 @@ export function createApp() {
     },
   }));
 
-  // CORS: allow localhost and any *.vercel.app (frontend previews)
-  const allowedOrigins = new Set([
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "https://patient-scheduler-frontend.vercel.app",
-    "https://patient-scheduler-front-end.vercel.app",
-    "https://patient-scheduler-six.vercel.app",
+  // CORS allowlist - specific domains only
+  const allowlist = new Set([
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://patient-scheduler-frontend.vercel.app',
+    'https://patient-scheduler-front-end.vercel.app',
+    'https://patient-scheduler-six.vercel.app',
   ]);
 
-  // CORS configuration
-  const corsOptions = {
+  // CORS middleware with explicit allowlist
+  const corsMw = cors({
     origin: (origin, cb) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return cb(null, true);
       
-      // Allow all localhost origins for development
+      // Allow localhost for development
       if (origin.startsWith("http://localhost")) return cb(null, true);
       
-      // Allow all Vercel app domains
-      if (origin.endsWith(".vercel.app")) return cb(null, true);
-      
-      // Allow specific known domains
-      if (allowedOrigins.has(origin)) return cb(null, true);
+      // Check against allowlist
+      if (allowlist.has(origin)) return cb(null, true);
       
       console.log(`CORS blocked origin: ${origin}`);
       return cb(new Error("Not allowed by CORS"));
     },
     credentials: true,
-    methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
-    allowedHeaders: ["Content-Type","Authorization","X-Requested-With"]
-  };
-
-  app.use(cors(corsOptions));
-  app.options("*", cors(corsOptions)); // preflight
-
-  // Explicit OPTIONS handler for all API routes
-  app.options("/api/*", (req, res) => {
-    const origin = req.headers.origin;
-    
-    if (origin && (origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || allowedOrigins.has(origin))) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
-      res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
-    }
-    
-    res.status(200).end();
+    methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization','X-Requested-With']
   });
+
+  app.use(corsMw);
+  app.options('*', corsMw); // Handle all OPTIONS requests
 
   // Global CORS headers middleware - ensures ALL responses have CORS headers
   app.use((req, res, next) => {
     const origin = req.headers.origin;
     
     // Set CORS headers for all responses
-    if (origin && (origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || allowedOrigins.has(origin))) {
+    if (origin && (allowlist.has(origin) || origin.startsWith('http://localhost'))) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
+      res.setHeader('Vary', 'Origin');
     }
     
     next();
@@ -328,11 +309,10 @@ export function createApp() {
     const origin = req.headers.origin;
     
     // Set CORS headers for error responses
-    if (origin && (origin.endsWith('.vercel.app') || origin.startsWith('http://localhost') || allowedOrigins.has(origin))) {
+    if (origin && (allowlist.has(origin) || origin.startsWith('http://localhost'))) {
       res.setHeader('Access-Control-Allow-Origin', origin);
       res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With');
+      res.setHeader('Vary', 'Origin');
     }
     
     res.status(err.status || 500).json({ 

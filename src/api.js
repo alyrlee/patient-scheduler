@@ -2,30 +2,38 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
   (import.meta.env.DEV 
     ? 'http://localhost:4000' 
-    : 'https://patient-scheduler-backend.vercel.app');
+    : 'https://server-6t3aytxht-ashley-lees-projects.vercel.app');
+
+// Common fetch options
+const common = { 
+  headers: { 
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  } 
+};
 
 export async function fetchProviders() {
-  const r = await fetch(`${API_BASE_URL}/api/providers`);
-  if (!r.ok) throw new Error('providers failed');
+  const r = await fetch(`${API_BASE_URL}/api/providers`, common);
+  if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 export async function fetchAppointments() {
-  const r = await fetch(`${API_BASE_URL}/api/appointments`);
-  if (!r.ok) throw new Error('appointments failed');
+  const r = await fetch(`${API_BASE_URL}/api/appointments`, common);
+  if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 export async function searchProviders(q) {
-  const r = await fetch(`${API_BASE_URL}/api/search/providers?q=${encodeURIComponent(q)}`);
-  if (!r.ok) throw new Error('search failed');
+  const r = await fetch(`${API_BASE_URL}/api/search/providers?q=${encodeURIComponent(q)}`, common);
+  if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 export async function createAppointment({ providerId, patientName, start }) {
   const r = await fetch(`${API_BASE_URL}/api/appointments`, {
+    ...common,
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ providerId, patientName, start })
   });
   if (!r.ok) throw new Error(await r.text());
@@ -33,15 +41,18 @@ export async function createAppointment({ providerId, patientName, start }) {
 }
 
 export async function cancelAppointment(id) {
-  const r = await fetch(`${API_BASE_URL}/api/appointments/${id}/cancel`, { method: 'PATCH' });
+  const r = await fetch(`${API_BASE_URL}/api/appointments/${id}/cancel`, { 
+    ...common,
+    method: 'PATCH' 
+  });
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 export async function rescheduleAppointment(id, start) {
   const r = await fetch(`${API_BASE_URL}/api/appointments/${id}/reschedule`, {
+    ...common,
     method: 'PATCH',
-    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ start })
   });
   if (!r.ok) throw new Error(await r.text());
@@ -50,8 +61,8 @@ export async function rescheduleAppointment(id, start) {
 
 export async function sendChatMessage(message) {
   const r = await fetch(`${API_BASE_URL}/api/chat`, {
+    ...common,
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ message })
   });
   if (!r.ok) throw new Error(await r.text());
