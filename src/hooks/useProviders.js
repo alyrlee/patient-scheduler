@@ -32,7 +32,7 @@ export function useAppointments() {
   return useQuery({
     queryKey: queryKeys.appointments,
     queryFn: async () => {
-      const response = await fetch(`${import.meta.env.DEV ? 'http://localhost:4000' : 'https://patient-scheduler-back-dynwth7i2-ashley-lees-projects.vercel.app'}/api/appointments`);
+      const response = await fetch('/api/appointments');
       if (!response.ok) throw new Error('appointments failed');
       return response.json();
     },
