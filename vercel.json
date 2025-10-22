@@ -4,9 +4,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://patient-scheduler-server-b6xxsdplc-ashley-lees-projects.vercel.app/api/$1" },
-    { "source": "/health",   "destination": "https://patient-scheduler-server-b6xxsdplc-ashley-lees-projects.vercel.app/health" },
+    { "source": "/api/(.*)", "destination": "https://patient-scheduler-server-buzjzeu5u-ashley-lees-projects.vercel.app/api/$1" },
+    { "source": "/health",   "destination": "https://patient-scheduler-server-buzjzeu5u-ashley-lees-projects.vercel.app/health" },
     { "source": "/(.*)",     "destination": "/index.html" }
   ],
   "env": { "VITE_API_BASE_URL": "" }
 }
+
+
