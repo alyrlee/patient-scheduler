@@ -1,15 +1,14 @@
 {
   "version": 2,
   "functions": {
-    "api/index.js": {
-      "maxDuration": 30,
-      "runtime": "nodejs20.x"
+    "index.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.js" },
-    { "source": "/health", "destination": "/api/index.js" },
-    { "source": "/", "destination": "/api/index.js" }
+    { "source": "/api/(.*)", "destination": "/index.js" },
+    { "source": "/health", "destination": "/index.js" },
+    { "source": "/", "destination": "/index.js" }
   ],
   "env": {
     "NODE_ENV": "production",

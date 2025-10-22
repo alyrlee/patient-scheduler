@@ -30,24 +30,39 @@ export function openDb() {
     dbPath = TMP_DB_PATH;
     
     // On first boot, copy seed database to /tmp if it doesn't exist
-    if (!fs.existsSync(TMP_DB_PATH)) {
-      if (fs.existsSync(SEED_DB_PATH)) {
-        fs.copyFileSync(SEED_DB_PATH, TMP_DB_PATH);
-        console.log('Copied seed database to /tmp/database.sqlite');
+    try {
+      if (!fs.existsSync(TMP_DB_PATH)) {
+        if (fs.existsSync(SEED_DB_PATH)) {
+          fs.copyFileSync(SEED_DB_PATH, TMP_DB_PATH);
+          console.log('Copied seed database to /tmp/database.sqlite');
+        }
       }
+    } catch (error) {
+      console.log('Could not copy seed database, using in-memory database:', error.message);
+      dbPath = ':memory:';
     }
   }
 
-  const db = new Database(dbPath);
-
-  // Only run schema if using in-memory database (Vercel)
-  if (isVercel) {
+  let db;
+  try {
+    db = new Database(dbPath);
+    
+    // Only run schema if using in-memory database (Vercel)
+    if (isVercel || dbPath === ':memory:') {
+      const schemaSql = fs.readFileSync(SCHEMA, 'utf8');
+      db.exec('PRAGMA foreign_keys = ON;');
+      db.exec(schemaSql);
+    } else {
+      // For file-based database, just ensure foreign keys are enabled
+      db.exec('PRAGMA foreign_keys = ON;');
+    }
+  } catch (error) {
+    console.error('Database initialization error:', error);
+    // Fallback to in-memory database
+    db = new Database(':memory:');
     const schemaSql = fs.readFileSync(SCHEMA, 'utf8');
     db.exec('PRAGMA foreign_keys = ON;');
     db.exec(schemaSql);
-  } else {
-    // For file-based database, just ensure foreign keys are enabled
-    db.exec('PRAGMA foreign_keys = ON;');
   }
 
   if (isVercel && !_seeded) {

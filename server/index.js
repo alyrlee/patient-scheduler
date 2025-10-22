@@ -1,6 +1,7 @@
-// server/index.js (dev server)
+// server/index.js (Vercel serverless function)
 import { createApp } from "./app.js";
 
 const app = createApp();
-const port = Number(process.env.PORT || 4000);
-app.listen(port, () => console.log(`API on http://localhost:${port}`));
+
+// Export the app for Vercel serverless functions
+export default app;

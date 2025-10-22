@@ -5,11 +5,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://server-6t3aytxht-ashley-lees-projects.vercel.app/api/$1"
+      "destination": "https://server-ol850ejof-ashley-lees-projects.vercel.app/api/$1"
     },
     {
       "source": "/health",
-      "destination": "https://server-6t3aytxht-ashley-lees-projects.vercel.app/health"
+      "destination": "https://server-ol850ejof-ashley-lees-projects.vercel.app/health"
     },
     {
       "source": "/(.*)",
