@@ -1,6 +1,5 @@
 // server/app.js - Express app without listen()
 import express from "express";
-import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -37,10 +36,8 @@ export function createApp() {
     },
   }));
 
-  // Simplified CORS - with proxy approach, browser only talks to frontend domain
-  // Keep harmless CORS for direct API access (curl, Postman, etc.)
-  app.use(cors({ origin: true }));        // echoes the incoming Origin if present
-  app.options('*', cors({ origin: true }));  // preflight
+  // CORS removed - browser is now same-origin with frontend via proxy
+  // No CORS needed since all browser requests go through frontend domain
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
