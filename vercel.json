@@ -1,21 +1,15 @@
 {
+  "version": 2,
+  "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite",
+
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://server-ol850ejof-ashley-lees-projects.vercel.app/api/$1"
-    },
-    {
-      "source": "/health",
-      "destination": "https://server-ol850ejof-ashley-lees-projects.vercel.app/health"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/api/(.*)", "destination": "https://patient-scheduler-server-hut01qj0i-ashley-lees-projects.vercel.app/api/$1" },
+    { "source": "/health",   "destination": "https://patient-scheduler-server-hut01qj0i-ashley-lees-projects.vercel.app/health" },
+    { "source": "/(.*)",     "destination": "/index.html" }
   ],
+
   "env": {
     "VITE_API_BASE_URL": ""
   }

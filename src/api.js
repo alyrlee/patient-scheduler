@@ -1,35 +1,29 @@
-// Backend API URL - use environment variable or fallback for DEV only
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-  (import.meta.env.DEV ? 'http://localhost:4000' : '');
-
-// Headers for requests without body (GET)
-const baseHeaders = { 'Accept': 'application/json' };
-
-// Headers for requests with body (POST/PATCH)
+// Use relative URLs for proxy approach - no CORS needed
+const baseHeaders = { 'Accept': 'application/json' };        // no Content-Type on GETs
 const jsonHeaders = { ...baseHeaders, 'Content-Type': 'application/json' };
 
 export async function fetchProviders() {
-  const r = await fetch(`${API_BASE_URL}/api/providers`, { headers: baseHeaders });
+  const r = await fetch('/api/providers', { headers: baseHeaders });
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 export async function fetchAppointments() {
-  const r = await fetch(`${API_BASE_URL}/api/appointments`, { headers: baseHeaders });
+  const r = await fetch('/api/appointments', { headers: baseHeaders });
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 export async function searchProviders(q) {
-  const r = await fetch(`${API_BASE_URL}/api/search/providers?q=${encodeURIComponent(q)}`, { headers: baseHeaders });
+  const r = await fetch(`/api/search/providers?q=${encodeURIComponent(q)}`, { headers: baseHeaders });
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
 
 export async function createAppointment({ providerId, patientName, start }) {
-  const r = await fetch(`${API_BASE_URL}/api/appointments`, {
-    headers: jsonHeaders,
+  const r = await fetch('/api/appointments', {
     method: 'POST',
+    headers: jsonHeaders,
     body: JSON.stringify({ providerId, patientName, start })
   });
   if (!r.ok) throw new Error(await r.text());
@@ -37,7 +31,7 @@ export async function createAppointment({ providerId, patientName, start }) {
 }
 
 export async function cancelAppointment(id) {
-  const r = await fetch(`${API_BASE_URL}/api/appointments/${id}/cancel`, { 
+  const r = await fetch(`/api/appointments/${id}/cancel`, { 
     headers: baseHeaders,
     method: 'PATCH' 
   });
@@ -46,7 +40,7 @@ export async function cancelAppointment(id) {
 }
 
 export async function rescheduleAppointment(id, start) {
-  const r = await fetch(`${API_BASE_URL}/api/appointments/${id}/reschedule`, {
+  const r = await fetch(`/api/appointments/${id}/reschedule`, {
     headers: jsonHeaders,
     method: 'PATCH',
     body: JSON.stringify({ start })
@@ -56,7 +50,7 @@ export async function rescheduleAppointment(id, start) {
 }
 
 export async function sendChatMessage(message) {
-  const r = await fetch(`${API_BASE_URL}/api/chat`, {
+  const r = await fetch('/api/chat', {
     headers: jsonHeaders,
     method: 'POST',
     body: JSON.stringify({ message })

@@ -1,0 +1,7 @@
+// server/api/index.js (Vercel serverless function)
+import { createApp } from "../app.js";
+
+const app = createApp();
+
+// Export the app for Vercel serverless functions
+export default app;

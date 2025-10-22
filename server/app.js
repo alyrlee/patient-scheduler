@@ -37,37 +37,10 @@ export function createApp() {
     },
   }));
 
-  // Simplified CORS for proxy approach
-  // With frontend proxy, most requests are same-origin, but we still need CORS for direct API access
-  const corsMw = cors({
-    origin: (origin, cb) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return cb(null, true);
-      
-      // Allow localhost for development
-      if (origin.startsWith('http://localhost')) return cb(null, true);
-      
-      // Allow all Vercel preview domains for this project
-      if (origin.endsWith('.vercel.app') && origin.includes('patient-scheduler')) return cb(null, true);
-      
-      // Allow specific production domains
-      const allowedOrigins = [
-        'https://patient-scheduler-frontend.vercel.app',
-        'https://patient-scheduler-front-end.vercel.app',
-        'https://patient-scheduler-six.vercel.app'
-      ];
-      
-      if (allowedOrigins.includes(origin)) return cb(null, true);
-      
-      console.log(`CORS blocked origin: ${origin}`);
-      return cb(null, false);
-    },
-    credentials: true,
-    methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-    allowedHeaders: ['Content-Type','Authorization','X-Requested-With','Accept']
-  });
-
-  app.use(corsMw);
+  // Simplified CORS - with proxy approach, browser only talks to frontend domain
+  // Keep harmless CORS for direct API access (curl, Postman, etc.)
+  app.use(cors({ origin: true }));        // echoes the incoming Origin if present
+  app.options('*', cors({ origin: true }));  // preflight
 
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -299,3 +272,6 @@ export function createApp() {
 
   return app;
 }
+
+// Export the app for Vercel serverless functions
+export default createApp();
