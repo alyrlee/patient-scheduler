@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useProviders, useAppointments } from '@/hooks/useProviders';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,8 +11,30 @@ const ProvidersView = React.lazy(() => import('@/views/ProvidersView'));
 const AppointmentsView = React.lazy(() => import('@/views/AppointmentsView'));
 
 function Dashboard() {
+  const queryClient = useQueryClient();
   const { data: providers = [], isLoading: providersLoading } = useProviders();
   const { data: appointments = [], isLoading: appointmentsLoading } = useAppointments();
+
+  const handleBooked = (appointment) => {
+    console.log('Appointment booked:', appointment);
+    // Invalidate and refetch appointments data
+    queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    queryClient.invalidateQueries({ queryKey: ['providers'] });
+  };
+
+  const handleCancelled = (appointmentId) => {
+    console.log('Appointment cancelled:', appointmentId);
+    // Invalidate and refetch appointments data
+    queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    queryClient.invalidateQueries({ queryKey: ['providers'] });
+  };
+
+  const handleRescheduled = (appointment) => {
+    console.log('Appointment rescheduled:', appointment);
+    // Invalidate and refetch appointments data
+    queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    queryClient.invalidateQueries({ queryKey: ['providers'] });
+  };
 
   if (providersLoading || appointmentsLoading) {
     return (
@@ -84,9 +107,9 @@ function Dashboard() {
       {/* AI Assistant */}
       <div className="mb-8">
         <AssistantSection
-          onBooked={() => {}}
-          onCancelled={() => {}}
-          onRescheduled={() => {}}
+          onBooked={handleBooked}
+          onCancelled={handleCancelled}
+          onRescheduled={handleRescheduled}
         />
       </div>
 
