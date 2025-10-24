@@ -14,10 +14,15 @@ export function AuthProvider({ children }) {
       const response = await fetch('/api/auth/me', { credentials: 'include' });
       if (response.ok) {
         setUser(await response.json());
+      } else if (response.status === 401) {
+        // 401 is expected when user is not logged in - don't log as error
+        setUser(null);
       } else {
+        console.warn('Auth check failed with status:', response.status);
         setUser(null);
       }
-    } catch {
+    } catch (error) {
+      console.warn('Auth check failed:', error.message);
       setUser(null);
     }
   }

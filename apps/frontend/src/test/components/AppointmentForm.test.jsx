@@ -44,7 +44,7 @@ describe('AppointmentForm', () => {
   };
 
   const mockSlot = {
-    iso: '2024-01-15T10:00:00.000Z',
+    iso: '2025-01-15T10:00:00.000Z',
     label: '10:00 AM',
   };
 
