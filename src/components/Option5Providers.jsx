@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 
 /** -------- Types (converted to JSDoc for JS) -------- */
 /**
@@ -33,6 +33,100 @@ import React, { useEffect, useMemo, useState } from "react";
 const cls = (...xs) => xs.filter(Boolean).join(" ");
 
 const uniqueSorted = (list) => Array.from(new Set(list)).sort((a, b) => a.localeCompare(b));
+
+/** ===================== Modal ===================== */
+function ProviderSlotsModal({
+  provider,
+  onClose,
+  onSelectSlot,
+}) {
+  const overlayRef = useRef(null);
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    closeButtonRef.current?.focus();
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const initials =
+    provider.avatarText ||
+    provider.name.split(" ").map(n => n[0]).slice(0,2).join("").toUpperCase();
+
+  // Optional: group slots by date (YYYY-MM-DD)
+  const byDate = provider.nextSlots.reduce((acc, s) => {
+    const d = s.iso.slice(0,10);
+    (acc[d] ||= []).push(s);
+    return acc;
+  }, {});
+
+  return (
+    <div
+      ref={overlayRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`All slots for ${provider.name}`}
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      onMouseDown={(e) => {
+        // click outside content closes
+        if (e.target === overlayRef.current) onClose();
+      }}
+    >
+      <div className="absolute inset-0 bg-black/40" />
+      <div className="relative bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl mx-4 max-h-[85vh] overflow-hidden">
+        {/* Header */}
+        <div className="flex items-start justify-between p-4 border-b">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-curious-blue-100 text-curious-blue-700 flex items-center justify-center font-semibold" aria-hidden>
+              {initials}
+            </div>
+            <div className="min-w-0">
+              <h3 className="font-semibold text-gray-900 truncate">{provider.name}</h3>
+              <p className="text-sm text-gray-500">{provider.specialty} • {provider.location}</p>
+            </div>
+          </div>
+          <button
+            ref={closeButtonRef}
+            onClick={onClose}
+            className="rounded-md px-3 py-1.5 text-sm border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-curious-blue-500"
+          >
+            Close
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-4 overflow-auto">
+          {provider.nextSlots.length === 0 ? (
+            <p className="text-sm text-gray-500">No available slots.</p>
+          ) : (
+            <div className="space-y-6">
+              {Object.entries(byDate).map(([date, slots]) => (
+                <div key={date}>
+                  <p className="text-sm font-medium text-gray-700 mb-2">
+                    {new Date(date + "T00:00:00").toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" })}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {slots.map((slot) => (
+                      <button
+                        key={slot.id}
+                        onClick={() => onSelectSlot?.(provider, slot)}
+                        className="px-3 py-2 rounded-md border border-gray-300 text-sm hover:bg-curious-blue-50 hover:border-curious-blue-400 focus:outline-none focus:ring-2 focus:ring-curious-blue-500"
+                        aria-label={`Book ${slot.timeLabel} on ${date}`}
+                      >
+                        {slot.timeLabel}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /** -------- Provider Card -------- */
 function ProviderCard({
@@ -145,6 +239,9 @@ export default function Option5Providers({
   const [specialty, setSpecialty] = useState("all");
   const [location, setLocation] = useState("all");
   const [date, setDate] = useState(null);
+
+  // NEW: modal state
+  const [openProvider, setOpenProvider] = useState(null);
 
   // derive filter lists if not provided
   const specialtyOptions = useMemo(
@@ -274,13 +371,22 @@ export default function Option5Providers({
               key={p.id}
               item={p}
               onSelectSlot={onSelectSlot}
-              onViewAll={(provider) => {
-                // Replace with your routing/modal
-                console.log("View all slots for", provider.name);
-              }}
+              onViewAll={(provider) => setOpenProvider(provider)}
             />
           ))}
         </div>
+      )}
+
+      {/* Modal */}
+      {openProvider && (
+        <ProviderSlotsModal
+          provider={openProvider}
+          onClose={() => setOpenProvider(null)}
+          onSelectSlot={(provider, slot) => {
+            onSelectSlot?.(provider, slot);
+            setOpenProvider(null);
+          }}
+        />
       )}
     </section>
   );
@@ -298,7 +404,7 @@ export const DEMO_PROVIDERS = [
       { id: "p1s2", timeLabel: "11:30 AM", iso: "2025-10-24T11:30:00-05:00" },
       { id: "p1s3", timeLabel: "2:00 PM",  iso: "2025-10-24T14:00:00-05:00"  },
       { id: "p1s4", timeLabel: "4:15 PM", iso: "2025-10-24T16:15:00-05:00" },
-      { id: "p1s5", timeLabel: "5:30 PM", iso: "2025-10-24T17:30:00-05:00" },
+      { id: "p1s5", timeLabel: "5:30 PM", iso: "2025-10-25T17:30:00-05:00" },
     ],
   },
   {
@@ -309,7 +415,7 @@ export const DEMO_PROVIDERS = [
     nextSlots: [
       { id: "p2s1", timeLabel: "9:30 AM", iso: "2025-10-24T09:30:00-05:00" },
       { id: "p2s2", timeLabel: "1:00 PM", iso: "2025-10-24T13:00:00-05:00" },
-      { id: "p2s3", timeLabel: "3:45 PM", iso: "2025-10-24T15:45:00-05:00" },
+      { id: "p2s3", timeLabel: "3:45 PM", iso: "2025-10-25T15:45:00-05:00" },
     ],
   },
   {
@@ -318,9 +424,9 @@ export const DEMO_PROVIDERS = [
     specialty: "Pediatrics",
     location: "Plano",
     nextSlots: [
-      { id: "p3s1", timeLabel: "10:15 AM", iso: "2025-10-24T10:15:00-05:00" },
-      { id: "p3s2", timeLabel: "12:45 PM", iso: "2025-10-24T12:45:00-05:00" },
-      { id: "p3s3", timeLabel: "4:00 PM",  iso: "2025-10-24T16:00:00-05:00"  },
+      { id: "p3s1", timeLabel: "10:15 AM", iso: "2025-10-26T10:15:00-05:00" },
+      { id: "p3s2", timeLabel: "12:45 PM", iso: "2025-10-26T12:45:00-05:00" },
+      { id: "p3s3", timeLabel: "4:00 PM",  iso: "2025-10-27T16:00:00-05:00"  },
     ],
   },
   {
