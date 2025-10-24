@@ -89,7 +89,30 @@ jobs:
 
       - name: Generate bundle report
         run: |
-          npx webpack-bundle-analyzer dist/assets/*.js --mode static --report bundle-report.html --no-open
+          # Create a simple bundle size report instead of using webpack-bundle-analyzer
+          echo "# Bundle Analysis Report" > bundle-report.html
+          echo "<h2>Bundle Sizes</h2>" >> bundle-report.html
+          echo "<table border='1'><tr><th>File</th><th>Size (bytes)</th><th>Gzipped (bytes)</th></tr>" >> bundle-report.html
+          
+          for file in dist/assets/*.js; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              size=$(wc -c < "$file")
+              gzipped_size=$(gzip -c "$file" | wc -c)
+              echo "<tr><td>$filename</td><td>$size</td><td>$gzipped_size</td></tr>" >> bundle-report.html
+            fi
+          done
+          
+          for file in dist/assets/*.css; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              size=$(wc -c < "$file")
+              gzipped_size=$(gzip -c "$file" | wc -c)
+              echo "<tr><td>$filename</td><td>$size</td><td>$gzipped_size</td></tr>" >> bundle-report.html
+            fi
+          done
+          
+          echo "</table>" >> bundle-report.html
 
       - name: Upload bundle report
         uses: actions/upload-artifact@v4
