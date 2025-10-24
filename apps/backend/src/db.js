@@ -75,19 +75,62 @@ export function initDb() {
       );
     `);
     
-    // Insert sample data for Vercel
+    // Insert comprehensive sample data for Vercel
     const providers = [
-      { id: "prov_1", doctor: "Dr. Sarah Johnson", specialty: "Cardiology", location: "Dallas", rating: 4.8 },
-      { id: "prov_2", doctor: "Dr. Michael Chen", specialty: "Cardiology", location: "Plano", rating: 4.9 },
-      { id: "prov_3", doctor: "Dr. Emily Rodriguez", specialty: "Cardiology", location: "Frisco", rating: 4.7 }
+      // Cardiology
+      { id: 'p1',  doctor: 'Dr. Amy Kim',         specialty: 'Cardiology',   location: 'Dallas',  rating: 4.8 },
+      { id: 'p2',  doctor: 'Dr. Ravi Patel',      specialty: 'Cardiology',   location: 'Plano',   rating: 4.7 },
+      { id: 'p3',  doctor: 'Dr. Sophia Nguyen',   specialty: 'Cardiology',   location: 'Frisco',  rating: 4.9 },
+
+      // Oncology
+      { id: 'p4',  doctor: 'Dr. Marcus Alvarez',  specialty: 'Oncology',     location: 'Dallas',  rating: 4.6 },
+      { id: 'p5',  doctor: 'Dr. Lila Shah',       specialty: 'Oncology',     location: 'Plano',   rating: 4.8 },
+
+      // Pediatrics
+      { id: 'p6',  doctor: 'Dr. Hannah Brooks',   specialty: 'Pediatrics',   location: 'Frisco',  rating: 4.9 },
+      { id: 'p7',  doctor: 'Dr. Omar Haddad',     specialty: 'Pediatrics',   location: 'Dallas',  rating: 4.7 },
+
+      // Orthopedics
+      { id: 'p8',  doctor: 'Dr. Jordan Lee',      specialty: 'Orthopedics',  location: 'Plano',   rating: 4.6 },
+      { id: 'p9',  doctor: 'Dr. Priya Menon',     specialty: 'Orthopedics',  location: 'Frisco',  rating: 4.8 },
+
+      // Dermatology
+      { id: 'p10', doctor: 'Dr. Brian O\'Connell', specialty: 'Dermatology',  location: 'Plano',   rating: 4.7 },
+      { id: 'p11', doctor: 'Dr. Keiko Tanaka',    specialty: 'Dermatology',  location: 'Dallas',  rating: 4.8 },
+
+      // Neurology
+      { id: 'p12', doctor: 'Dr. Elena Garcia',    specialty: 'Neurology',    location: 'Frisco',  rating: 4.7 },
+      { id: 'p13', doctor: 'Dr. Thomas Reed',     specialty: 'Neurology',    location: 'Dallas',  rating: 4.9 },
     ];
     
+    // Insert providers
     providers.forEach(provider => {
       db.prepare(`
         INSERT OR IGNORE INTO providers (id, doctor, specialty, location, rating)
         VALUES (?, ?, ?, ?, ?)
       `).run(provider.id, provider.doctor, provider.specialty, provider.location, provider.rating);
     });
+
+    // Generate time slots for the next 5 days
+    const base = new Date();
+    const timeSlots = ['10:00', '13:00', '15:30'];
+    
+    for (let d = 0; d < 5; d++) {
+      for (const time of timeSlots) {
+        const day = new Date(base);
+        day.setDate(base.getDate() + d + 1);
+        const [hh, mm] = time.split(':');
+        day.setHours(hh, mm, 0, 0);
+        
+        providers.forEach(provider => {
+          const slotId = `slot_${provider.id}_${day.getTime()}`;
+          db.prepare(`
+            INSERT OR IGNORE INTO slots (id, provider_id, start, status)
+            VALUES (?, ?, ?, ?)
+          `).run(slotId, provider.id, day.toISOString(), 'open');
+        });
+      }
+    }
     
     console.log("✅ Database initialized with sample data");
   }
