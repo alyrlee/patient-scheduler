@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth';
 
@@ -7,6 +7,7 @@ export default function ResponsiveHeader() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
 
   const navigation = [
     { name: 'Dashboard', href: '/', current: true },
@@ -21,6 +22,23 @@ export default function ResponsiveHeader() {
     setUserMenuOpen(false);
     setMobileMenuOpen(false);
   };
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    }
+
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [userMenuOpen]);
 
   return (
     <header className="bg-white shadow-sm">
@@ -77,18 +95,21 @@ export default function ResponsiveHeader() {
         {/* Desktop user menu */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {user ? (
-            <div className="relative">
+            <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-x-2 text-sm font-semibold leading-6 text-gray-900 hover:text-curious-blue-600"
+                className="flex items-center gap-x-2 text-sm font-semibold leading-6 text-gray-900 hover:text-curious-blue-600 transition-colors"
               >
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 rounded-full bg-curious-blue-100 flex items-center justify-center">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-full bg-curious-blue-100 flex items-center justify-center ring-2 ring-curious-blue-200">
                     <span className="text-sm font-medium text-curious-blue-600">
                       {user.name?.charAt(0)?.toUpperCase() || 'U'}
                     </span>
                   </div>
-                  <span className="hidden sm:block">{user.name}</span>
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm font-medium text-gray-900">{user.name}</span>
+                    <span className="text-xs text-gray-500">{user.email}</span>
+                  </div>
                 </div>
                 <svg 
                   viewBox="0 0 20 20" 
@@ -197,9 +218,16 @@ export default function ResponsiveHeader() {
                   <div className="py-6">
                     {user ? (
                       <div className="space-y-2">
-                        <div className="px-3 py-2 text-sm text-gray-500">
-                          <div className="font-medium text-gray-900">{user.name}</div>
-                          <div>{user.email}</div>
+                        <div className="flex items-center gap-3 px-3 py-2">
+                          <div className="h-10 w-10 rounded-full bg-curious-blue-100 flex items-center justify-center ring-2 ring-curious-blue-200">
+                            <span className="text-sm font-medium text-curious-blue-600">
+                              {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="font-medium text-gray-900">{user.name}</div>
+                            <div className="text-sm text-gray-500">{user.email}</div>
+                          </div>
                         </div>
                         <button
                           onClick={() => {

@@ -57,103 +57,92 @@ export default function AppRouter() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div className="h-screen flex overflow-hidden bg-gradient-to-br from-custom-gray-50 via-white to-curious-blue-50">
-          {/* Sidebar would go here */}
-          <div className="flex flex-col w-0 flex-1 overflow-hidden">
-            {/* Header would go here */}
-            <main id="main" className="flex-1 relative overflow-y-auto focus:outline-none content-container">
-              <div className="py-6">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                  <Routes>
-                    {/* Public routes */}
-                    <Route 
-                      path="/login" 
-                      element={
-                        <RouteErrorBoundary>
-                          <Suspense fallback={<PageLoader />}>
-                            <Login />
-                          </Suspense>
-                        </RouteErrorBoundary>
-                      } 
-                    />
-                    <Route 
-                      path="/signup" 
-                      element={
-                        <RouteErrorBoundary>
-                          <Suspense fallback={<PageLoader />}>
-                            <Signup />
-                          </Suspense>
-                        </RouteErrorBoundary>
-                      } 
-                    />
-                    
-                    {/* Protected routes */}
-                    <Route 
-                      path="/" 
-                      element={
-                        <ProtectedRoute>
-                          <RouteErrorBoundary>
-                            <Suspense fallback={<PageLoader />}>
-                              <Dashboard />
-                            </Suspense>
-                          </RouteErrorBoundary>
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/providers" 
-                      element={
-                        <ProtectedRoute>
-                          <RouteErrorBoundary>
-                            <Suspense fallback={<PageLoader />}>
-                              <Providers />
-                            </Suspense>
-                          </RouteErrorBoundary>
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/appointments" 
-                      element={
-                        <ProtectedRoute>
-                          <RouteErrorBoundary>
-                            <Suspense fallback={<PageLoader />}>
-                              <Appointments />
-                            </Suspense>
-                          </RouteErrorBoundary>
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/chat" 
-                      element={
-                        <ProtectedRoute>
-                          <RouteErrorBoundary>
-                            <Suspense fallback={<PageLoader />}>
-                              <Chat />
-                            </Suspense>
-                          </RouteErrorBoundary>
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route 
-                      path="/settings" 
-                      element={
-                        <ProtectedRoute>
-                          <RouteErrorBoundary>
-                            <Suspense fallback={<PageLoader />}>
-                              <Settings />
-                            </Suspense>
-                          </RouteErrorBoundary>
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                  </Routes>
-                </div>
-              </div>
-            </main>
-          </div>
+        <Routes>
+          {/* Public routes */}
+          <Route 
+            path="/login" 
+            element={
+              <RouteErrorBoundary>
+                <Suspense fallback={<PageLoader />}>
+                  <Login />
+                </Suspense>
+              </RouteErrorBoundary>
+            } 
+          />
+          <Route 
+            path="/signup" 
+            element={
+              <RouteErrorBoundary>
+                <Suspense fallback={<PageLoader />}>
+                  <Signup />
+                </Suspense>
+              </RouteErrorBoundary>
+            } 
+          />
+          
+          {/* Protected routes */}
+          <Route 
+            path="/" 
+            element={
+              <ProtectedRoute>
+                <RouteErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Dashboard />
+                  </Suspense>
+                </RouteErrorBoundary>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/providers" 
+            element={
+              <ProtectedRoute>
+                <RouteErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Providers />
+                  </Suspense>
+                </RouteErrorBoundary>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/appointments" 
+            element={
+              <ProtectedRoute>
+                <RouteErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Appointments />
+                  </Suspense>
+                </RouteErrorBoundary>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/chat" 
+            element={
+              <ProtectedRoute>
+                <RouteErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Chat />
+                  </Suspense>
+                </RouteErrorBoundary>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute>
+                <RouteErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Settings />
+                  </Suspense>
+                </RouteErrorBoundary>
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
         
         {/* Toast notifications */}
         <Toaster
@@ -180,8 +169,7 @@ export default function AppRouter() {
             },
           }}
         />
-      </div>
-    </BrowserRouter>
-  </AuthProvider>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
