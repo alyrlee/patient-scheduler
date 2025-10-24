@@ -72,13 +72,20 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
     if (!input.trim()) return;
 
     const userMessage = {
-      id: Date.now(),
+      id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: 'user',
       content: input,
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    // Add user message immediately and ensure it persists
+    setMessages(prev => {
+      const newMessages = [...prev, userMessage];
+      console.log('Adding user message:', userMessage);
+      console.log('Total messages after user:', newMessages.length);
+      return newMessages;
+    });
+    
     const currentInput = input;
     setInput('');
     setSelectedAction(null); // Clear selected action after submit
@@ -89,21 +96,32 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
       const response = await sendChatMessage(currentInput);
       
       const assistantMessage = {
-        id: Date.now() + 1,
+        id: `assistant_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         type: 'assistant',
         content: response.reply || 'I apologize, but I couldn\'t process your request at the moment. Please try again.',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, assistantMessage]);
+      
+      setMessages(prev => {
+        const newMessages = [...prev, assistantMessage];
+        console.log('Adding assistant message:', assistantMessage);
+        console.log('Total messages after assistant:', newMessages.length);
+        return newMessages;
+      });
     } catch (error) {
       console.error('Chat API error:', error);
       const errorMessage = {
-        id: Date.now() + 1,
+        id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         type: 'assistant',
         content: 'I apologize, but I\'m having trouble connecting to the AI service. Please try again in a moment.',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, errorMessage]);
+      
+      setMessages(prev => {
+        const newMessages = [...prev, errorMessage];
+        console.log('Adding error message:', errorMessage);
+        return newMessages;
+      });
     } finally {
       setIsLoading(false);
     }
@@ -141,25 +159,28 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
 
       {/* Messages */}
       <div className="space-y-3 max-h-96 overflow-y-auto">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+        {messages.map((message, index) => {
+          console.log(`Rendering message ${index}:`, message);
+          return (
             <div
-              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                message.type === 'user'
-                  ? 'bg-curious-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-800'
-              }`}
+              key={message.id}
+              className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <p className="text-sm">{message.content}</p>
-              <p className="text-xs opacity-70 mt-1">
-                {message.timestamp.toLocaleTimeString()}
-              </p>
+              <div
+                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                  message.type === 'user'
+                    ? 'bg-curious-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-800'
+                }`}
+              >
+                <p className="text-sm">{message.content}</p>
+                <p className="text-xs opacity-70 mt-1">
+                  {message.timestamp.toLocaleTimeString()}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         {isLoading && (
           <div className="flex justify-start">
             <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg">
