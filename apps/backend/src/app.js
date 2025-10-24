@@ -11,6 +11,7 @@ import { z } from "zod";
 import { nanoid } from "nanoid";
 import { openDb, initDb } from "./db.js";
 import authRoutes from "./routes/auth.js";
+import fhirRoutes from "./routes/fhir.js";
 import { authLimiter, loginSlowdown, strictAuthLimiter, aiLimiter } from "./security/rateLimit.js";
 
 // Load environment variables
@@ -78,6 +79,9 @@ export function createApp() {
   app.use("/api/auth/signup", authLimiter);
   app.use("/api/auth/login", loginSlowdown, authLimiter);
   app.use("/api/auth", authRoutes);
+  
+  // FHIR routes
+  app.use("/fhir", fhirRoutes);
 
   app.get("/", (_req, res) => res.type("text").send("AI Scheduling API running. Try /health or /api/providers"));
   app.get("/health", (_req, res) => {
