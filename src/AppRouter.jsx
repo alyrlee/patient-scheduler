@@ -94,6 +94,18 @@ export default function AppRouter() {
             } 
           />
           <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <RouteErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Dashboard />
+                  </Suspense>
+                </RouteErrorBoundary>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/providers" 
             element={
               <ProtectedRoute>
