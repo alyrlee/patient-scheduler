@@ -2,6 +2,12 @@
 
 A modern, full-stack healthcare scheduling application with AI integration, built using React, Node.js, and advanced AI capabilities. Features a beautiful, responsive UI with comprehensive design system, robust authentication, and intelligent appointment management.
 
+<img width="1437" height="809" alt="Screenshot 2025-10-24 at 4 47 14 PM" src="https://github.com/user-attachments/assets/2b5ae302-0d6d-4a27-9470-fb1724474885" />
+<img width="1434" height="801" alt="Screenshot 2025-10-24 at 4 46 19 PM" src="https://github.com/user-attachments/assets/1a5dae8e-717e-4def-a089-42dda61c3c2a" />
+<img width="1430" height="803" alt="Screenshot 2025-10-24 at 4 46 36 PM" src="https://github.com/user-attachments/assets/eadee731-5cb3-4bf8-8eeb-2f77d2d03b3e" />
+<img width="1428" height="802" alt="Screenshot 2025-10-24 at 4 47 31 PM" src="https://github.com/user-attachments/assets/f9cfda9b-faae-48b9-80db-7d44335717ea" />
+<img width="1413" height="805" alt="Screenshot 2025-10-24 at 4 47 43 PM" src="https://github.com/user-attachments/assets/8a7eed05-1acb-4c26-9383-44714bf07c6e" />
+
 ## 🏗️ Project Structure
 
 This project follows a **monorepo architecture** with clear separation of concerns:
