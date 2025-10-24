@@ -10,55 +10,47 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-curious-blue-50 via-white to-custom-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-curious-blue-600">
-                  🏥 Patient Scheduler
-                </h1>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              {user ? (
-                // Authenticated user buttons
-                <>
-                  <span className="text-gray-700 font-medium">
-                    Welcome, {user.name}!
-                  </span>
-                  <button
-                    onClick={() => navigate('/')}
-                    className="bg-curious-blue-600 hover:bg-curious-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Dashboard
-                  </button>
-                  <button
-                    onClick={logout}
-                    className="text-gray-600 hover:text-gray-800 font-medium transition-colors"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                // Unauthenticated user buttons
-                <>
-                  <button
-                    onClick={() => navigate('/login')}
-                    className="text-curious-blue-600 hover:text-curious-blue-700 font-medium"
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => navigate('/signup')}
-                    className="bg-curious-blue-600 hover:bg-curious-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Get Started
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+      <header className="flex items-center justify-between bg-white shadow-sm px-6 py-3 border-b">
+        <div className="flex items-center gap-2">
+          <img src="/logo.png" alt="Patient Scheduler logo" className="h-8 w-8" />
+          <h1 className="text-xl font-semibold text-gray-800">Patient Scheduler</h1>
+        </div>
+
+        <div className="flex items-center gap-3 text-sm">
+          {user ? (
+            // Authenticated user buttons
+            <>
+              <span className="text-gray-600">Welcome, <strong>{user.name}</strong>!</span>
+              <button
+                onClick={() => navigate('/')}
+                className="bg-curious-blue-600 hover:bg-curious-blue-700 text-white px-3 py-1 rounded-md font-medium transition-colors"
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={logout}
+                className="border border-gray-300 hover:bg-gray-100 px-3 py-1 rounded-md text-gray-700"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            // Unauthenticated user buttons
+            <>
+              <button
+                onClick={() => navigate('/login')}
+                className="text-curious-blue-600 hover:text-curious-blue-700 font-medium"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => navigate('/signup')}
+                className="bg-curious-blue-600 hover:bg-curious-blue-700 text-white px-3 py-1 rounded-md font-medium transition-colors"
+              >
+                Get Started
+              </button>
+            </>
+          )}
         </div>
       </header>
 

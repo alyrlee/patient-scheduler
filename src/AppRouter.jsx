@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ErrorBoundary from './components/ErrorBoundary';
 import Spinner from './components/Spinner';
+import MainLayout from './components/MainLayout';
 import { AuthProvider, useAuth } from './context/auth';
 
 // Lazy load pages
@@ -45,7 +46,11 @@ function ProtectedRoute({ children }) {
     );
   }
   
-  return children;
+  return (
+    <MainLayout>
+      {children}
+    </MainLayout>
+  );
 }
 
 export default function AppRouter() {
