@@ -19,17 +19,17 @@ export async function toolGetOpenSlots({ providerId }) {
   `).all(providerId);
 }
 
-export async function toolCreateAppointment({ providerId, patientName, start }) {
+export async function toolCreateAppointment({ providerId: _providerId, patientName: _patientName, start: _start }) {
   // you can call your existing Express handler or do it inline via DB tx
   // here, inline is simplest:
   // ... replicate your /api/appointments logic ...
 }
 
-export async function toolCancelAppointment({ appointmentId }) {
+export async function toolCancelAppointment({ appointmentId: _appointmentId }) {
   // replicate /api/appointments/:id/cancel logic
 }
 
-export async function toolRescheduleAppointment({ appointmentId, start }) {
+export async function toolRescheduleAppointment({ appointmentId: _appointmentId, start: _start }) {
   // replicate /api/appointments/:id/reschedule logic
 }
 

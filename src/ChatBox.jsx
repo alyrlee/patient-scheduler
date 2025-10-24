@@ -205,7 +205,7 @@ export default function ChatBox({ onBooked, onCancelled, onRescheduled, initialI
             text: enhanceResponse(data.reply ?? "I'm sorry, I couldn't process that request. Please try again.", data.intent),
             timestamp: new Date()
           }]);
-    } catch (e) {
+    } catch {
       setMessages((m) => [
         ...m,
           { 
@@ -418,7 +418,7 @@ export default function ChatBox({ onBooked, onCancelled, onRescheduled, initialI
   }
 
   // Adaptive Quick Actions Component
-  function AdaptiveQuickActions({ message, messageIndex }) {
+  function AdaptiveQuickActions({ message, _messageIndex }) {
     // Only show for assistant messages
     if (message.role !== "assistant") return null;
 

@@ -81,9 +81,9 @@ function seedDatabase(db) {
   `);
 
   const providers = [
-    ['1', 'Dr. Sarah Johnson', 'Cardiology', 'Dallas Medical Center', 4.8, 'Expert in heart disease treatment'],
-    ['2', 'Dr. Michael Chen', 'Cardiology', 'Houston Heart Institute', 4.9, 'Specialist in interventional cardiology'],
-    ['3', 'Dr. Emily Rodriguez', 'Cardiology', 'Austin Cardiac Care', 4.7, 'Focus on preventive cardiology']
+    ['p1', 'Dr. Amy Kim', 'Cardiology', 'Dallas', 4.8, 'Expert in heart disease treatment'],
+    ['p2', 'Dr. Ravi Patel', 'Cardiology', 'Plano', 4.7, 'Specialist in interventional cardiology'],
+    ['p3', 'Dr. Sophia Nguyen', 'Cardiology', 'Frisco', 4.9, 'Focus on preventive cardiology']
   ];
   providers.forEach(p => insertProvider.run(p));
 
@@ -101,7 +101,7 @@ function seedDatabase(db) {
     return d;
   };
 
-  const providersIds = ['1', '2', '3'];
+  const providersIds = ['p1', 'p2', 'p3'];
   for (const pid of providersIds) {
     for (let day = 0; day < 7; day++) {
       for (let hour = 9; hour < 17; hour++) {

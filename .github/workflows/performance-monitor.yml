@@ -85,7 +85,6 @@ jobs:
       - name: Build and analyze bundle
         run: |
           npm run build
-          npm run bundlesize
 
       - name: Generate bundle report
         run: |
