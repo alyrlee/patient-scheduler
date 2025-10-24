@@ -141,8 +141,8 @@ cd server && npm run seed
 ```
 
 **Access the application:**
-- **Production Frontend**: [https://patient-scheduler-frontend.vercel.app](https://patient-scheduler-frontend.vercel.app)
-- **Production Backend**: [https://patient-scheduler-backend.vercel.app](https://patient-scheduler-backend.vercel.app)
+- **Production Frontend**: [https://patient-scheduler-client-4u5pck36u-ashley-lees-projects.vercel.app](https://patient-scheduler-client-4u5pck36u-ashley-lees-projects.vercel.app)
+- **Production Backend**: [https://patient-scheduler-server-17hix8ak2-ashley-lees-projects.vercel.app](https://patient-scheduler-server-17hix8ak2-ashley-lees-projects.vercel.app)
 - **Local Development**: [http://localhost:5174](http://localhost:5174)
 - **Local API**: [http://localhost:4000](http://localhost:4000)
 

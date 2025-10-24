@@ -52,7 +52,6 @@ export default function ChatBox({ onBooked, onCancelled, onRescheduled, initialI
     pendingActions: []
   });
   const lastResponse = useRef(null);
-  const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
   // Update input when initialInput prop changes
@@ -63,14 +62,6 @@ export default function ChatBox({ onBooked, onCancelled, onRescheduled, initialI
     }
   }, [initialInput]);
 
-  // Auto-scroll to bottom when new messages arrive
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   // Focus input on mount
   useEffect(() => {
@@ -616,7 +607,6 @@ export default function ChatBox({ onBooked, onCancelled, onRescheduled, initialI
             ))}
             
             {isTyping && <TypingIndicator />}
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Input Area */}
