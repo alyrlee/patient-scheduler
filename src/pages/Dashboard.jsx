@@ -1,15 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "@/components/Header";
 
 export default function Dashboard() {
   const user = { name: "Demo User" }; // replace with your auth context later
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header user={user} />
-
-      <main className="flex flex-1">
+    <div className="flex flex-1">
         {/* Collapsible Sidebar placeholder */}
         <aside className="w-64 bg-white border-r border-gray-200 p-4 hidden md:block">
           <nav className="space-y-2">
@@ -51,7 +47,6 @@ export default function Dashboard() {
             </div>
           </div>
         </section>
-      </main>
     </div>
   );
 }
