@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth';
+import Logo from './Logo';
 
 export default function ResponsiveHeader() {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export default function ResponsiveHeader() {
             className="-m-1.5 p-1.5 flex items-center gap-2"
           >
             <span className="sr-only">Patient Scheduler</span>
-            <img src="/logo.png" alt="Patient Scheduler logo" className="h-8 w-8" />
+            <Logo className="h-8 w-8" />
             <span className="text-xl font-semibold text-gray-800">Patient Scheduler</span>
           </button>
         </div>
@@ -173,7 +174,7 @@ export default function ResponsiveHeader() {
                   className="-m-1.5 p-1.5 flex items-center gap-2"
                 >
                   <span className="sr-only">Patient Scheduler</span>
-                  <img src="/logo.png" alt="Patient Scheduler logo" className="h-8 w-8" />
+                  <Logo className="h-8 w-8" />
                   <span className="text-xl font-semibold text-gray-800">Patient Scheduler</span>
                 </button>
                 <button
