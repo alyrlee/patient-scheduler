@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { sendChatMessage } from '../../services/api';
 
 export default function ChatBox({ initialInput, onBooked, onCancelled, onRescheduled }) {
   const [input, setInput] = useState(initialInput || '');
@@ -78,21 +79,34 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput('');
     setSelectedAction(null); // Clear selected action after submit
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      // Call the actual API
+      const response = await sendChatMessage(currentInput);
+      
       const assistantMessage = {
         id: Date.now() + 1,
         type: 'assistant',
-        content: 'I understand you\'re looking for help. I can assist you with scheduling appointments, finding providers, or answering questions about your healthcare needs. What specific help do you need?',
+        content: response.reply || 'I apologize, but I couldn\'t process your request at the moment. Please try again.',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Chat API error:', error);
+      const errorMessage = {
+        id: Date.now() + 1,
+        type: 'assistant',
+        content: 'I apologize, but I\'m having trouble connecting to the AI service. Please try again in a moment.',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

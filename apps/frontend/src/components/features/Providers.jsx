@@ -15,7 +15,6 @@ import React, { useEffect, useMemo, useState, useRef } from "react";
  * @property {string} specialty
  * @property {string} location
  * @property {Slot[]} nextSlots - up to ~3 shown; "View all" can navigate to details
- * @property {string} [avatarText] - optional initials for fallback avatar
  */
 
 /**
@@ -50,9 +49,7 @@ function ProviderSlotsModal({
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const initials =
-    provider.avatarText ||
-    provider.name.split(" ").map(n => n[0]).slice(0,2).join("").toUpperCase();
+  // Removed initials generation
 
   // Optional: group slots by date (YYYY-MM-DD)
   const byDate = provider.nextSlots.reduce((acc, s) => {
@@ -77,14 +74,9 @@ function ProviderSlotsModal({
       <div className="relative bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl mx-4 max-h-[85vh] overflow-hidden">
         {/* Header */}
         <div className="flex items-start justify-between p-4 border-b">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-curious-blue-100 text-curious-blue-700 flex items-center justify-center font-semibold" aria-hidden>
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <h3 className="font-semibold text-gray-900 truncate">{provider.name}</h3>
-              <p className="text-sm text-gray-500">{provider.specialty} • {provider.location}</p>
-            </div>
+          <div className="min-w-0">
+            <h3 className="font-semibold text-gray-900 truncate">{provider.name}</h3>
+            <p className="text-sm text-gray-500">{provider.specialty} • {provider.location}</p>
           </div>
           <button
             ref={closeButtonRef}
@@ -134,31 +126,16 @@ function ProviderCard({
   onSelectSlot,
   onViewAll,
 }) {
-  const initials =
-    item.avatarText ||
-    item.name
-      .split(" ")
-      .map((n) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
+  // Removed initials generation
 
   return (
     <article
       className="p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition"
       aria-label={`${item.name}, ${item.specialty} in ${item.location}`}
     >
-      <div className="flex items-center gap-3 mb-3">
-        <div
-          className="h-10 w-10 rounded-full bg-curious-blue-100 text-curious-blue-700 flex items-center justify-center font-semibold"
-          aria-hidden
-        >
-          {initials}
-        </div>
-        <div className="min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
-          <p className="text-sm text-gray-500">{item.specialty} • {item.location}</p>
-        </div>
+      <div className="mb-3">
+        <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
+        <p className="text-sm text-gray-500">{item.specialty} • {item.location}</p>
       </div>
 
       <p className="text-sm text-gray-600 mb-2">Next Available:</p>
