@@ -5,8 +5,8 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://backend-phi-seven-76.vercel.app/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://backend-phi-seven-76.vercel.app/api/:path*"
     },
     {
       "source": "/health",
@@ -16,8 +16,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "VITE_API_BASE_URL": "https://backend-phi-seven-76.vercel.app"
-  }
+  ]
 }

@@ -4,18 +4,23 @@ import morgan from "morgan";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import { z } from "zod";
 import { nanoid } from "nanoid";
 import { openDb, initDb } from "./db.js";
 import authRoutes from "./routes/auth.js";
+import { authLimiter, loginSlowdown, strictAuthLimiter, aiLimiter } from "./security/rateLimit.js";
 
 // Load environment variables
 dotenv.config();
 
 export function createApp() {
   const app = express();
+  
+  // Trust proxy for Vercel deployment (fixes rate limiting)
+  app.set('trust proxy', 1);
   
   // Initialize database
   initDb();
@@ -42,24 +47,36 @@ export function createApp() {
     },
   }));
 
-  // CORS removed - browser is now same-origin with frontend via proxy
-  // No CORS needed since all browser requests go through frontend domain
+  // CORS configuration for production
+  const corsOptions = {
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174', 
+      'https://frontend-brown-two-40.vercel.app',
+      'https://frontend-qk260i703-ashley-lees-projects.vercel.app'
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
+  };
+  app.use(cors(corsOptions));
 
-  const limiter = rateLimit({
+  // General rate limiter for all requests
+  const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
     standardHeaders: true,
     legacyHeaders: false
   });
-  const aiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20 });
 
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(morgan("dev"));
-  app.use(limiter);
+  app.use(generalLimiter);
   
-  // Auth routes
+  // Auth routes with hardened rate limiting
+  app.use("/api/auth/signup", authLimiter);
+  app.use("/api/auth/login", loginSlowdown, authLimiter);
   app.use("/api/auth", authRoutes);
 
   app.get("/", (_req, res) => res.type("text").send("AI Scheduling API running. Try /health or /api/providers"));

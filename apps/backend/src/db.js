@@ -38,10 +38,10 @@ export function initDb() {
       CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY,
         email TEXT UNIQUE NOT NULL,
-        name TEXT NOT NULL,
-        password_hash TEXT NOT NULL,
-        role TEXT DEFAULT 'patient',
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        name TEXT,
+        password TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
       );
       
       CREATE TABLE IF NOT EXISTS providers (
