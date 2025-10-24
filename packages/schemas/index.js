@@ -1,6 +1,11 @@
+// Re-export all schemas from individual modules
+export * from './src/auth.js';
+export * from './src/appointments.js';
+
+// Legacy schemas for backward compatibility
 import { z } from 'zod';
 
-// Provider schemas
+// Provider schemas (legacy)
 export const ProviderSchema = z.object({
   id: z.string(),
   doctor: z.string(),
@@ -16,7 +21,7 @@ export const ProviderSchema = z.object({
   })).optional()
 });
 
-// Appointment schemas
+// Appointment schemas (legacy)
 export const AppointmentSchema = z.object({
   id: z.string(),
   patient_name: z.string(),
@@ -28,7 +33,7 @@ export const AppointmentSchema = z.object({
   provider_id: z.string()
 });
 
-// API Request/Response schemas
+// API Request/Response schemas (legacy)
 export const CreateAppointmentSchema = z.object({
   providerId: z.string(),
   patientName: z.string().min(1),
@@ -56,7 +61,7 @@ export const ChatMessageSchema = z.object({
   }).optional()
 });
 
-// API Response schemas
+// API Response schemas (legacy)
 export const ApiResponseSchema = z.object({
   success: z.boolean(),
   data: z.any().optional(),

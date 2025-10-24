@@ -18,16 +18,13 @@ export default function App() {
         <Route path="/" element={<RootLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route
-            element={<Protected />}
-            children={[
-              { path: "/", element: <Dashboard /> },
-              { path: "/providers", element: <Providers /> },
-              { path: "/appointments", element: <Appointments /> },
-              { path: "/chat", element: <Chat /> },
-              { path: "/settings", element: <Settings /> },
-            ]}
-          />
+          <Route element={<Protected />}>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/providers" element={<Providers />} />
+            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
         </Route>
       </Routes>
     </AuthProvider>
