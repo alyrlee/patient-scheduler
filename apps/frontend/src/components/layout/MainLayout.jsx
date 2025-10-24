@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAuth } from '../context/auth';
+import { useAuth } from '../../context/auth';
 import Header from './Header';
-import Navbar from './Navbar';
+import NavbarComponent from './Navbar';
 
 export default function MainLayout({ children }) {
   const { user, logout } = useAuth();
@@ -12,7 +12,7 @@ export default function MainLayout({ children }) {
       <Header />
 
       {/* Navbar - Navigation */}
-      <Navbar user={user} onSignOut={logout} />
+      <NavbarComponent user={user} onSignOut={logout} />
 
       {/* Main Content */}
       <main className="mx-auto max-w-7xl px-4 md:px-6 py-6">

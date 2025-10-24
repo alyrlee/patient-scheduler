@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchProviders, searchProviders, createAppointment, cancelAppointment, rescheduleAppointment } from '../api';
+import { fetchProviders, searchProviders, createAppointment, cancelAppointment, rescheduleAppointment } from '../services/api';
 
 // Query keys
 export const queryKeys = {

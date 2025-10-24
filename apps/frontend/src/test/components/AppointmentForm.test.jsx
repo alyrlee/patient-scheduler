@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import AppointmentForm from './components/forms/AppointmentForm';
+import AppointmentForm from '../../components/forms/AppointmentForm';
 
 // Mock the hooks
-jest.mock('./hooks/useProviders', () => ({
+jest.mock('../../hooks/useProviders', () => ({
   useCreateAppointment: () => ({
     mutateAsync: jest.fn().mockResolvedValue({}),
     isPending: false,

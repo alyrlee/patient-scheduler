@@ -1,7 +1,7 @@
 // src/components/LandingPage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./context/auth";
+import { useAuth } from "../../context/auth";
 import Header from './Header';
 
 export default function LandingPage() {

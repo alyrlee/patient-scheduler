@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-const ChatBox = React.lazy(() => import("../ChatBox"));
+const ChatBox = React.lazy(() => import("./ChatBox"));
 
 export default function AssistantSection({ initialInput, onBooked, onCancelled, onRescheduled }) {
   return (
