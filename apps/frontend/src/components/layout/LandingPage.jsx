@@ -30,16 +30,16 @@ export default function LandingPage() {
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
                 <button
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => navigate('/chat')}
                   className="bg-curious-blue-600 hover:bg-curious-blue-700 text-white px-8 py-3 rounded-lg font-medium text-lg transition-colors"
                 >
-                  Go to Dashboard
+                  Chat with AI Assistant
                 </button>
                 <button
-                  onClick={() => navigate('/chat')}
+                  onClick={() => navigate('/dashboard')}
                   className="border-2 border-curious-blue-600 text-curious-blue-600 hover:bg-curious-blue-50 px-8 py-3 rounded-lg font-medium text-lg transition-colors"
                 >
-                  Chat with AI
+                  View Dashboard
                 </button>
               </div>
             </>

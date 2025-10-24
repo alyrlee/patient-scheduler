@@ -87,7 +87,7 @@ export default function AppRouter() {
               <ProtectedRoute>
                 <RouteErrorBoundary>
                   <Suspense fallback={<PageLoader />}>
-                    <Dashboard />
+                    <Chat />
                   </Suspense>
                 </RouteErrorBoundary>
               </ProtectedRoute>

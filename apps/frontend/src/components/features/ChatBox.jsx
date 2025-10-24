@@ -11,6 +11,7 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
     }
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
 
   // Quick action prompts
   const quickActions = [
@@ -52,11 +53,16 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
     }
   ];
 
-  const handleQuickAction = (prompt) => {
+  const handleQuickAction = (prompt, actionId) => {
     setInput(prompt);
-    // Auto-submit the quick action
+    setSelectedAction(actionId);
+    // Focus the input field so user can see the text and modify if needed
     setTimeout(() => {
-      handleSubmit({ preventDefault: () => {} });
+      const inputElement = document.querySelector('input[type="text"]');
+      if (inputElement) {
+        inputElement.focus();
+        inputElement.setSelectionRange(prompt.length, prompt.length);
+      }
     }, 100);
   };
 
@@ -73,6 +79,7 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
+    setSelectedAction(null); // Clear selected action after submit
     setIsLoading(true);
 
     // Simulate AI response
@@ -98,12 +105,20 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
             {quickActions.map((action) => (
               <button
                 key={action.id}
-                onClick={() => handleQuickAction(action.prompt)}
-                className="flex items-center space-x-2 px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-curious-blue-300 transition-colors text-left"
+                onClick={() => handleQuickAction(action.prompt, action.id)}
+                className={`flex items-center space-x-2 px-3 py-2 text-sm rounded-lg transition-all duration-200 text-left transform hover:scale-[1.02] active:scale-[0.98] ${
+                  selectedAction === action.id
+                    ? 'bg-curious-blue-100 border-curious-blue-300 text-curious-blue-700 shadow-sm'
+                    : 'bg-white border border-gray-200 hover:bg-curious-blue-50 hover:border-curious-blue-300 hover:shadow-sm'
+                }`}
                 disabled={isLoading}
+                title={`Click to add "${action.prompt}" to your message`}
               >
                 <span className="text-lg">{action.icon}</span>
-                <span className="text-gray-700">{action.label}</span>
+                <span className="font-medium">{action.label}</span>
+                {selectedAction === action.id && (
+                  <span className="text-xs text-curious-blue-600 ml-auto">✓ Added</span>
+                )}
               </button>
             ))}
           </div>
@@ -148,7 +163,10 @@ export default function ChatBox({ initialInput, onBooked, onCancelled, onResched
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            setInput(e.target.value);
+            setSelectedAction(null); // Clear selected action when user types
+          }}
           placeholder="Ask me about appointments, providers, or scheduling..."
           className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-curious-blue-500 focus:border-transparent"
           disabled={isLoading}

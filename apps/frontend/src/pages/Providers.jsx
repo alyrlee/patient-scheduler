@@ -46,10 +46,6 @@ function Providers() {
       heading="Available Providers"
       loading={isLoading}
       onSelectSlot={handleSelectSlot}
-      onSearch={({ text, specialty, location, date }) => {
-        console.log("Search with:", { text, specialty, location, date });
-        // TODO: Implement server-side filtering
-      }}
     />
   );
 }
