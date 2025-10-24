@@ -31,29 +31,29 @@ export default function Header({ user, onSignOut }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/95 border-b border-slate-200">
-      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6">
-        <div className="flex h-14 items-center justify-between">
+    <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/80 bg-white/95 border-b border-slate-200 shadow-sm">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <NavLink to="/" className="flex items-center gap-2 group">
-            <Logo className="h-6 w-6" />
-            <span className="text-base font-semibold tracking-tight text-violet-700 group-hover:text-violet-800">
+          <NavLink to="/" className="flex items-center gap-3 group">
+            <Logo className="h-7 w-7" />
+            <span className="text-lg font-bold tracking-tight text-violet-700 group-hover:text-violet-800 transition-colors">
               Patient Scheduler
             </span>
           </NavLink>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-1">
             {nav.map((item) => (
               <NavLink
                 key={item.href}
                 to={item.href}
                 className={({ isActive }) =>
                   cx(
-                    "rounded-lg px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70 transition",
+                    "rounded-lg px-4 py-2.5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70 transition-all duration-200",
                     isActive
-                      ? "text-violet-800 bg-violet-100 ring-1 ring-violet-200"
-                      : "text-slate-700 hover:text-violet-700 hover:bg-violet-50"
+                      ? "text-violet-800 bg-violet-100 ring-1 ring-violet-200 shadow-sm"
+                      : "text-slate-700 hover:text-violet-700 hover:bg-violet-50 hover:shadow-sm"
                   )
                 }
                 end={item.href === "/dashboard"}
@@ -64,10 +64,10 @@ export default function Header({ user, onSignOut }) {
           </nav>
 
           {/* Right Side */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               aria-label="Search"
-              className="hidden sm:inline-flex rounded-full p-2 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70"
+              className="hidden sm:inline-flex rounded-full p-2.5 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70 transition-colors"
               onClick={() => alert("Search functionality coming soon")}
             >
               <SearchIcon className="h-5 w-5 text-slate-600" />
@@ -80,15 +80,15 @@ export default function Header({ user, onSignOut }) {
                   onClick={() => setMenuOpen((v) => !v)}
                   aria-haspopup="menu"
                   aria-expanded={menuOpen}
-                  className="flex items-center rounded-full bg-violet-100 text-violet-800 pl-1 pr-2 py-1.5 shadow-sm hover:bg-violet-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70"
+                  className="flex items-center rounded-full bg-violet-100 text-violet-800 pl-1 pr-3 py-2 shadow-sm hover:bg-violet-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70 transition-all duration-200"
                 >
-                  <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center ring-2 ring-white">
                     <span className="text-white text-sm font-semibold">
                       {user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'DU'}
                     </span>
                   </div>
-                  <span className="ml-2 hidden sm:inline text-sm font-medium">{user.name || 'Demo User'}</span>
-                  <ChevronDown className="ml-1 h-4 w-4" />
+                  <span className="ml-3 hidden sm:inline text-sm font-medium">{user.name || 'Demo User'}</span>
+                  <ChevronDown className="ml-2 h-4 w-4" />
                 </button>
 
                 {menuOpen && (
@@ -113,16 +113,16 @@ export default function Header({ user, onSignOut }) {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <NavLink
                   to="/login"
-                  className="px-3 py-2 text-sm font-medium text-slate-700 hover:text-violet-700 hover:bg-violet-50 rounded-lg transition"
+                  className="px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-violet-700 hover:bg-violet-50 rounded-lg transition-all duration-200 hover:shadow-sm"
                 >
                   Log In
                 </NavLink>
                 <NavLink
                   to="/signup"
-                  className="px-3 py-2 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 rounded-lg transition"
+                  className="px-4 py-2.5 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 rounded-lg transition-all duration-200 hover:shadow-md"
                 >
                   Sign Up
                 </NavLink>
@@ -131,7 +131,7 @@ export default function Header({ user, onSignOut }) {
 
             {/* Mobile Trigger */}
             <button
-              className="md:hidden inline-flex items-center justify-center rounded-lg p-2 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70"
+              className="md:hidden inline-flex items-center justify-center rounded-lg p-2.5 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70 transition-colors"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Open menu"
             >
@@ -150,13 +150,13 @@ export default function Header({ user, onSignOut }) {
 /* Mobile Sheet Component */
 function MobileSheet({ open, onClose, user, onSignOut }) {
   if (!open) return null;
-  const base = "block rounded-lg px-3 py-2 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70";
-  const active = "bg-violet-100 text-violet-800 ring-1 ring-violet-200";
-  const idle = "text-slate-700 hover:bg-violet-50 hover:text-violet-700";
+  const base = "block rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/70";
+  const active = "bg-violet-100 text-violet-800 ring-1 ring-violet-200 shadow-sm";
+  const idle = "text-slate-700 hover:bg-violet-50 hover:text-violet-700 hover:shadow-sm";
 
   return (
-    <div className="md:hidden border-t border-slate-200 bg-white">
-      <nav className="mx-auto max-w-7xl px-3 py-3 space-y-1">
+    <div className="md:hidden border-t border-slate-200 bg-white shadow-sm">
+      <nav className="mx-auto max-w-7xl px-4 py-4 space-y-2">
         {nav.map((item) => (
           <NavLink
             key={item.href}
