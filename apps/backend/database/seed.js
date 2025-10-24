@@ -1,4 +1,4 @@
-import { openDb } from './src/db.js';
+import { openDb } from '../src/db.js';
 import { nanoid } from 'nanoid';
 
 const db = openDb();
