@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://patient-scheduler-api.vercel.app/api/$1"
+    },
+    {
+      "source": "/health",
+      "destination": "https://patient-scheduler-api.vercel.app/health"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "VITE_API_BASE_URL": "https://patient-scheduler-api.vercel.app"
+  }
+}

@@ -25,7 +25,10 @@
     "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules",
     "install:all": "npm install && npm run install:frontend && npm run install:backend",
     "install:frontend": "cd apps/frontend && npm install",
-    "install:backend": "cd apps/backend && npm install"
+    "install:backend": "cd apps/backend && npm install",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:backend": "cd apps/backend && vercel --prod",
+    "deploy:frontend": "cd apps/frontend && vercel --prod"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

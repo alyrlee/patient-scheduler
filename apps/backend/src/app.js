@@ -8,13 +8,17 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import { z } from "zod";
 import { nanoid } from "nanoid";
-import { openDb } from "./db.js";
+import { openDb, initDb } from "./db.js";
 import authRoutes from "./routes/auth.js";
 
+// Load environment variables
 dotenv.config();
 
 export function createApp() {
   const app = express();
+  
+  // Initialize database
+  initDb();
   const db = openDb();
 
   // Safe, lazy OpenAI client getter (avoids crashing if env missing)

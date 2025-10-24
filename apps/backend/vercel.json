@@ -1,11 +1,21 @@
 {
   "version": 2,
   "functions": {
-    "api/index.js": { "maxDuration": 30 }
+    "api/index.js": {
+      "maxDuration": 30
+    }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.js" },
-    { "source": "/health",   "destination": "/api/index.js" }
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/health",
+      "destination": "/api/index.js"
+    }
   ],
-  "env": { "NODE_ENV": "production", "APP_MODE": "demo" }
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

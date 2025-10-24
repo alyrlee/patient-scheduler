@@ -24,6 +24,7 @@
         "morgan": "^1.10.1",
         "nanoid": "^5.1.6",
         "openai": "^6.5.0",
+        "serverless-http": "^4.0.0",
         "zod": "^4.1.12"
     },
     "devDependencies": {

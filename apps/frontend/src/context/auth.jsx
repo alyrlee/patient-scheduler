@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
+// API configuration for both development and production
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
 const AuthCtx = createContext({
   user: null,
   refresh: async () => {},
@@ -11,7 +14,7 @@ export function AuthProvider({ children }) {
 
   async function refresh() {
     try {
-      const response = await fetch('/api/auth/me', { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/api/auth/me`, { credentials: 'include' });
       if (response.ok) {
         setUser(await response.json());
       } else if (response.status === 401) {
@@ -29,7 +32,7 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     try {
-      await fetch('/api/auth/logout', { 
+      await fetch(`${API_BASE_URL}/api/auth/logout`, { 
         method: 'POST', 
         credentials: 'include' 
       });
