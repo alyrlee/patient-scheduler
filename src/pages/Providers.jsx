@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProviders } from '@/hooks/useProviders';
-import Providers, { DEMO_PROVIDERS } from '@/components/Providers';
+import ProvidersComponent, { DEMO_PROVIDERS } from '@/components/Providers';
 
 function Providers() {
   const { data: providers = [], isLoading, error } = useProviders();
@@ -41,7 +41,7 @@ function Providers() {
   }
 
   return (
-    <Providers
+    <ProvidersComponent
       providers={displayProviders}
       heading="Available Providers"
       loading={isLoading}
