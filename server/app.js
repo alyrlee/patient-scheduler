@@ -3,6 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import { z } from "zod";
@@ -49,6 +50,8 @@ export function createApp() {
   const aiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20 });
 
   app.use(express.json({ limit: "10mb" }));
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
   app.use(morgan("dev"));
   app.use(limiter);
   
