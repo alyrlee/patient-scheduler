@@ -2,7 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/auth";
-import ResponsiveHeader from './ResponsiveHeader';
+import Header from './Header';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -10,8 +10,8 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-curious-blue-50 via-white to-custom-gray-50">
-      {/* Responsive Header */}
-      <ResponsiveHeader />
+      {/* Header */}
+      <Header user={user} onSignOut={logout} />
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

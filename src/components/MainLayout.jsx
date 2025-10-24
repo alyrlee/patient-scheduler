@@ -1,14 +1,17 @@
 import React from 'react';
-import ResponsiveHeader from './ResponsiveHeader';
+import { useAuth } from '../context/auth';
+import Header from './Header';
 
 export default function MainLayout({ children }) {
+  const { user, logout } = useAuth();
+  
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Responsive Header */}
-      <ResponsiveHeader />
+      {/* Header */}
+      <Header user={user} onSignOut={logout} />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="mx-auto max-w-7xl px-4 md:px-6 py-6">
         {children}
       </main>
     </div>
