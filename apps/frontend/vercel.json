@@ -6,11 +6,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://patient-scheduler-api.vercel.app/api/$1"
+      "destination": "https://backend-m3pfrk0xr-ashley-lees-projects.vercel.app/api/$1"
     },
     {
       "source": "/health",
-      "destination": "https://patient-scheduler-api.vercel.app/health"
+      "destination": "https://backend-m3pfrk0xr-ashley-lees-projects.vercel.app/health"
     },
     {
       "source": "/(.*)",
@@ -18,6 +18,6 @@
     }
   ],
   "env": {
-    "VITE_API_BASE_URL": "https://patient-scheduler-api.vercel.app"
+    "VITE_API_BASE_URL": "https://backend-m3pfrk0xr-ashley-lees-projects.vercel.app"
   }
 }
