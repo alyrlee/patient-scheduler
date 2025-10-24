@@ -231,7 +231,7 @@ export function createApp() {
       const providerList = providers
         .map(p => `${p.doctor} (${p.specialty}, ${p.location}) - Rating: ${p.rating}`).join("\n");
 
-      const systemPrompt = `You are an AI assistant for a cardiology appointment scheduling system.\n\nAvailable providers:\n${providerList}\n\nAssist with: booking, rescheduling, cancellations, and provider info. Keep answers concise.`;
+      const systemPrompt = `You are an AI assistant for a comprehensive medical appointment scheduling system.\n\nAvailable providers:\n${providerList}\n\nIMPORTANT: When a user requests to book an appointment, you should:\n1. Confirm the provider and time they want\n2. Ask for their name if not provided\n3. Guide them through the booking process\n4. Be helpful and proactive in completing the booking\n\nYou can help with appointments for any specialty (Cardiology, Oncology, Pediatrics, Orthopedics, Dermatology, Neurology). Keep answers concise and helpful.`;
 
       const openai = getOpenAI();
       const completion = await openai.chat.completions.create({
