@@ -225,7 +225,7 @@ function EmptyState({ message = "No providers match your filters." }) {
 }
 
 /** -------- Filter + Cards (main) -------- */
-export default function Option5Providers({
+export default function Providers({
   providers,
   specialties,
   locations,
@@ -234,6 +234,7 @@ export default function Option5Providers({
   loading,
   heading,
 }) {
+  console.log('Providers component rendering with:', { providers: providers?.length, loading, heading });
   // local UI state for filters
   const [text, setText] = useState("");
   const [specialty, setSpecialty] = useState("all");

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useProviders } from '@/hooks/useProviders';
-import Option5Providers, { DEMO_PROVIDERS } from '@/components/Option5Providers';
+import Providers, { DEMO_PROVIDERS } from '@/components/Providers';
 
 function Providers() {
   const { data: providers = [], isLoading, error } = useProviders();
+  
+  console.log('Providers component rendering with:', { providers, isLoading, error });
 
   // Transform API data to match Option5Providers format
   const transformedProviders = providers.map(provider => ({
@@ -39,7 +41,7 @@ function Providers() {
   }
 
   return (
-    <Option5Providers
+    <Providers
       providers={displayProviders}
       heading="Available Providers"
       loading={isLoading}
