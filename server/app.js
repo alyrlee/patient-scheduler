@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import { z } from "zod";
 import { nanoid } from "nanoid";
 import { openDb } from "./db.js";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 
@@ -50,6 +51,9 @@ export function createApp() {
   app.use(express.json({ limit: "10mb" }));
   app.use(morgan("dev"));
   app.use(limiter);
+  
+  // Auth routes
+  app.use("/api/auth", authRoutes);
 
   app.get("/", (_req, res) => res.type("text").send("AI Scheduling API running. Try /health or /api/providers"));
   app.get("/health", (_req, res) => {
