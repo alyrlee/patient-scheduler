@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Spinner from '@/components/Spinner';
 import AssistantSection from '@/components/AssistantSection';
+import { useAuth } from '@/context/auth';
 
 // Lazy load heavy components
 const ProvidersView = React.lazy(() => import('@/views/ProvidersView'));
@@ -12,6 +13,7 @@ const AppointmentsView = React.lazy(() => import('@/views/AppointmentsView'));
 
 function Dashboard() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const { data: providers = [], isLoading: providersLoading } = useProviders();
   const { data: appointments = [], isLoading: appointmentsLoading } = useAppointments();
 
@@ -56,7 +58,9 @@ function Dashboard() {
       {/* Today Summary Card */}
       <div className="today-summary section-primary">
         <div className="today-summary-content">
-          <h2>Today's Summary</h2>
+          <h2>
+            {user?.name ? `Welcome back, ${user.name}!` : 'Today\'s Summary'}
+          </h2>
           {!nextAppointmentToday ? (
             <div className="today-summary-no-appointments">
               <div className="today-summary-no-appointments-icon">
