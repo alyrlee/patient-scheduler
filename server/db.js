@@ -45,24 +45,41 @@ export function openDb() {
 
   let db;
   try {
+    console.log("🗄️ Creating database connection to:", dbPath);
     db = new Database(dbPath);
+    console.log("✅ Database connection created");
     
     // Only run schema if using in-memory database (Vercel)
     if (isVercel || dbPath === ':memory:') {
+      console.log("📋 Running schema for in-memory database...");
       const schemaSql = fs.readFileSync(SCHEMA, 'utf8');
+      console.log("📄 Schema SQL loaded, length:", schemaSql.length);
       db.exec('PRAGMA foreign_keys = ON;');
+      console.log("🔗 Foreign keys enabled");
       db.exec(schemaSql);
+      console.log("✅ Schema executed successfully");
+      
+      // Verify users table was created
+      const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all();
+      console.log("📊 Tables in database:", tables.map(t => t.name));
+      
+      const usersTable = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='users'").get();
+      console.log("👥 Users table schema:", usersTable?.sql || 'NOT FOUND');
     } else {
+      console.log("📁 Using file-based database, enabling foreign keys only");
       // For file-based database, just ensure foreign keys are enabled
       db.exec('PRAGMA foreign_keys = ON;');
+      console.log("🔗 Foreign keys enabled");
     }
   } catch (error) {
-    console.error('Database initialization error:', error);
+    console.error('💥 Database initialization error:', error);
+    console.log("🔄 Falling back to in-memory database...");
     // Fallback to in-memory database
     db = new Database(':memory:');
     const schemaSql = fs.readFileSync(SCHEMA, 'utf8');
     db.exec('PRAGMA foreign_keys = ON;');
     db.exec(schemaSql);
+    console.log("✅ Fallback database initialized");
   }
 
   if (isVercel && !_seeded) {
